@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+  </head>
+  <body>
+    <h1>Register</h1>
+    <form id="reg" action="">
+      <label for="anrede">Anrede:</label>
+      <select id="anrede" name="anrede">
+        <option value="herr">Herr</option>
+        <option value="frau">Frau</option>
+      </select>
+      <br />
+      <br />
+
+      <label for="vname">Vorname: </label>
+      <input id="vname" type="text" required /><br />
+      <br />
+
+      <label for="nname">Nachname: </label>
+      <input id="nname" type="text" required /><br />
+      <br />
+
+      <label for="mail">E-Mail: </label>
+      <input id="mail" type="email" required /><br />
+      <br />
+
+      <label for="username">Username: </label>
+      <input id="username" type="text" required /><br />
+      <br />
+
+      <label for="pw">Passwort: </label>
+      <input id="pw" type="password" required /><br />
+      <br />
+
+      <label for="repw">Passwort wiederholen: </label>
+      <input id="repw" type="password" required /><br /><br />
+
+      <input type="submit" value="Register" required />
+    </form>
+  </body>
+</html>
