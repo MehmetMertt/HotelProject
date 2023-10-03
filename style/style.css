@@ -1,0 +1,34 @@
+/* https://colorhunt.co/palette/2e43744b527e7c81ade5c3a6 */
+:root {
+  --navy: #2e4374;
+  --beige: #e5c3a6;
+  --blue: #7c81ad;
+  --lightnavy: #4b527e;
+}
+
+nav ul {
+  list-style: none;
+}
+
+nav li {
+  border: 1px solid;
+  border-color: black;
+  display: inline;
+  padding: 5px;
+  background-color: var(--navy);
+}
+
+nav li a {
+  color: white;
+  text-decoration: none;
+}
+
+nav li:hover {
+  background-color: var(--lightnavy);
+}
+
+header > * {
+  margin: 2px;
+  color: var(--navy);
+  text-align: center;
+}
