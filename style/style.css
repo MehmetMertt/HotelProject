@@ -15,34 +15,24 @@ body {
   background-image: url("../img/lobby.jpg");
   background-size: cover;
   background-repeat: no-repeat;
+  max-height: 100vh;
   height: 100vh;
+  background-position: 50% 50%;
 }
 
-nav ul {
-  list-style: none;
-  padding-top: 20px;
-  float: right;
+.navbar {
+overflow: hidden;
 }
 
-nav li {
-  margin: 10px;
-  border: 1px solid;
-  border-color: black;
-  display: inline;
-  padding: 10px;
-  
+.fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  background-color: white;
 }
 
-nav li a {
-  color: white;
-  text-decoration: none;
-}
-
-nav li:hover {
-  background-color: var(--lightnavy);
-}
-
-.title {
+.titlemain {
   color: black;
   font-size: xx-large;
   text-transform: uppercase;
@@ -123,6 +113,12 @@ nav li:hover {
   margin-right: 20px;
 }
 
+@media only screen and (max-width: 600px) {
+  .zimmer img {
+    max-width: 350px;
+  }
+  }
+
 .zimmer p {
   text-align: left;
 }
@@ -132,7 +128,7 @@ nav li:hover {
 }
 
 .card {
-  display: inline-block;
+  display: inline-flex;
   margin: 20px;
   height: 400px;
   width: 300px;
@@ -143,6 +139,7 @@ nav li:hover {
 
 .card img{
   width:100%;
+  min-height: 197.433px;
   margin: 0 auto;
 }
 
@@ -156,3 +153,58 @@ nav li:hover {
   align-items: center;
   text-align: center;
 }
+
+.title {
+  color: black;
+  text-transform: uppercase;
+  font-size: 3em;
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+
+.footer {
+  background-color: var(--blue);
+  height: max-content;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nodec {
+  list-style: none;
+  display: flex;
+}
+
+.nodec {
+  display: inline-table;
+}
+
+.number {
+display: inline-flex;}
+
+.nodec a {
+  color: black;
+  text-decoration: none;
+}
+
+.nodec li:hover {
+  text-decoration: dotted;
+}
+
+.social {
+display: flex;
+flex-direction: row;
+}
+
+@media only screen and (max-width: 600px) {
+  .social {
+    flex-direction: column;
+  }
+  }
+
+.nodec li {
+  margin: 10px;
+  color: black;
+}
+
