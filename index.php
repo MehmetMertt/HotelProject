@@ -16,41 +16,9 @@
   <body>
 
 
-    <nav id='navbar' class="navbar navbar-expand-lg">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="login.html">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="register.html">Register</a>
-            </li>
-            <!--
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-              </a>
-                            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-            --->
-          </ul>
-        </div>
-      </div>
-    </nav>
-
+    <?php
+    include 'inc/navbar.php';
+    ?>
 
     <!---Head START-->
     <div class="container-fluid">
@@ -160,9 +128,9 @@ Das Schlafzimmer ist ein Rückzugsort der Ruhe und Erholung. Ein luxuriöses Kin
         <li><a href=#><i class="bi bi-facebook"></i></a></li>
         <li><a href=#><i class="bi bi-youtube"></i></a></li>
         <li><a href=#><i class="bi bi-twitter-x"></i></a></li>
-        <li><a href="index.html">Startseite</a></li>
-        <li><a href="impressum.html">Impressum</a></li>
-        <li><a href="Datenschutz.html">Datenschutz</a></li>
+        <li><a href="index.php">Startseite</a></li>
+        <li><a href="impressum.php">Impressum</a></li>
+        <li><a href="Datenschutz.php">Datenschutz</a></li>
       </ul>
 
     </div>

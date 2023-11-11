@@ -1,3 +1,4 @@
 module.exports = {
-    injectBody: true, // enable instant update
-  }
+    injectBody: true,
+    php: "C:\\xampp\\php\\php.exe"
+}
