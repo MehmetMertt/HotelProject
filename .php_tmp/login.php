@@ -17,6 +17,11 @@
   </head>
   <body>
     <h1>Login</h1>
+
+    <?php
+    include 'inc/navbar.php';
+    ?>
+
     <form action="login.php">
       <div class="center">
         <label for="user">Username:</label><br />

@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   scroll-behavior: smooth;
 }
 
@@ -21,7 +21,7 @@ body {
 }
 
 .navbar {
-overflow: hidden;
+  overflow: hidden;
 }
 
 .fixed {
@@ -38,9 +38,7 @@ overflow: hidden;
   text-transform: uppercase;
   font-size: 2em;
   margin-top: 20px;
-  
 }
-
 
 .scroll {
   bottom: 40px;
@@ -92,12 +90,11 @@ overflow: hidden;
 }
 
 @media only screen and (max-width: 600px) {
-.newspaper {
-  float: none;
-  width: 50%;
+  .newspaper {
+    float: none;
+    width: 50%;
+  }
 }
-}
-
 
 .zimmer {
   max-width: 100%;
@@ -117,7 +114,7 @@ overflow: hidden;
   .zimmer img {
     max-width: 350px;
   }
-  }
+}
 
 .zimmer p {
   text-align: left;
@@ -137,12 +134,11 @@ overflow: hidden;
   text-align: center;
 }
 
-.card img{
-  width:100%;
+.card img {
+  width: 100%;
   min-height: 197.433px;
   margin: 0 auto;
 }
-
 
 .card p {
   text-align: left;
@@ -162,6 +158,9 @@ overflow: hidden;
   padding-top: 10px;
 }
 
+footer {
+  bottom: 0;
+}
 
 .footer {
   background-color: var(--blue);
@@ -181,7 +180,8 @@ overflow: hidden;
 }
 
 .number {
-display: inline-flex;}
+  display: inline-flex;
+}
 
 .nodec a {
   color: black;
@@ -193,18 +193,69 @@ display: inline-flex;}
 }
 
 .social {
-display: flex;
-flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 @media only screen and (max-width: 600px) {
   .social {
     flex-direction: column;
   }
-  }
+}
 
 .nodec li {
   margin: 10px;
   color: black;
 }
 
+/* DASHBAORD */
+
+/* Dashbaord */
+
+/*  MANAGE */
+
+.currentbooking {
+  border: black solid 2px;
+  padding: 20px;
+}
+
+.label {
+  color: var(--grey);
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.auswahl {
+  border: var(--navy) solid 3px;
+}
+
+.auswahlcenter {
+  padding-top: 25px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auswahl > * {
+  padding: 0;
+}
+
+@media only screen and (max-width: 800px) {
+  .auswahlcenter {
+    width: fit-content;
+    max-width: 300px;
+    margin: auto;
+    display: flex;
+  }
+}
+
+.dropdown-menu {
+  min-width: 300px;
+}
+
+.dropdown-menu div button {
+  width: 25px;
+}
+
+/*  MANAGE */
