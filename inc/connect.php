@@ -17,8 +17,6 @@ $db = new mysqli($db_host,$db_user,$db_pw,$db_db);
 if($db->connect_error) {
     echo "Connection Error";
     exit();
-} else {
-    echo "Hi";
 }
 
 

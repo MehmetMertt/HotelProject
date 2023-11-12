@@ -1,3 +1,13 @@
+<?php
+session_start();
+if(isset($_SESSION['id']) == FALSE) {
+    header('location: login.php');
+    exit();
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="de">
 
@@ -24,7 +34,7 @@
 
 
     <div class="main">
-        <h1>Wohin als Nächstes, <?php echo "Mehmet"; ?>
+        <h1>Wohin als Nächstes, <?php echo $_SESSION['vorname']; ?>
 
             <div class="auswahlcenter">
                 <div class="row auswahl">
@@ -74,6 +84,20 @@
             </div>
 
     </div>
+
+    <div class="angebote">
+        <h1>Angebote</h1>
+        <p>Rabatte, Werbeaktionen und Sonderangebote für Sie</p>
+        <div class="card-angebot">
+            <h1>Machen Sie ihren bisher längsten Urlaub</h1>
+            <p>Durchstöbern Sie Unterkünfte mit Langzeitaufenthalten -
+                viele zu reduzierten Monatspreisen.</p>
+            <img width="250px" src="img/family_laptop.jpg">
+
+        </div>
+    </div>
+
+
 
 
 

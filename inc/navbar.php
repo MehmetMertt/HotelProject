@@ -10,33 +10,54 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
+                <?php if(!(isset($_SESSION['id']))) : ?>
                 <li class="nav-item">
                     <a class="nav-link" href="login.php">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">Register</a>
                 </li>
+                <?php endif; ?>
 
                 <!--
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                  </a>
-                                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  </ul>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
                 </li>
-                --->
+-->
             </ul>
+            <?php if(isset($_SESSION['id'])) : ?>
+
+
             <ul class="navbar-nav ms-auto">
-                <li class="navitem">
-                    <a class="nav-link profile" href="profile.php"><img height="25px" src="img/logo.png">Mehmet Mert</a>
+                <li class="nav-item dropdown dropstart">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img height="25px" src="img/logo.png">
+                        <?php echo $_SESSION['vorname']; echo ' '; echo $_SESSION['nachname']; ?>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">#</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                    </ul>
                 </li>
             </ul>
 
+            <?php endif; ?>
         </div>
     </div>
 </nav>
