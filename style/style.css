@@ -206,6 +206,10 @@ footer {
 
 /* DASHBAORD */
 
+#dropdown {
+  min-width: 250px;
+}
+
 /* Dashbaord */
 
 /*  MANAGE */
@@ -247,3 +251,23 @@ footer {
 }
 
 /*  MANAGE */
+
+/* PROFILE */
+
+.profileelement > * {
+}
+
+.infos {
+  margin: 50px;
+  margin-bottom: 5px;
+}
+
+#picedit {
+  float: right;
+}
+
+#picedit:hover {
+  cursor: pointer;
+}
+
+/* END PROFILE */
