@@ -1,3 +1,47 @@
+<?php
+
+session_start();
+
+if(isset($_POST['changePb'])) {
+        
+        $pb = $_FILES["pb"];
+        $checkIfError = TRUE;
+    
+        if($pb["size"] > 5000000) { //5 MB
+             $message = "Sorry, your uploaded image is too large!";
+             $checkIfError = FALSE;
+
+        }
+    
+        if(strtolower($pb["type"]) != "image/jpeg" && strtolower($pb["type"]) != "image/png") {
+            $message = "Sorry, Please only upload jpeg/png Files!";
+            $checkIfError = FALSE;
+        } 
+    
+    
+        if($checkIfError == TRUE) {
+            $path = 'upload/' . $_SESSION['id'];
+            if(file_exists($path) == FALSE) {
+                mkdir($path,0777,true);
+            }
+        
+            if(move_uploaded_file($_FILES['pb']['tmp_name'],$path . '/pb.jpg')){
+                 $message = "You file was successfully uploaded!";
+            } else {
+                $message = "There was a error while uploading your file!";
+                $checkIfError == FALSE;
+            };
+        }
+          
+}
+
+
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,19 +85,47 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Wählen Sie ein Bild zum Hochladen aus</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+
+                    <form enctype="multipart/form-data" method="post" action="">
+                        <div class="mb-3">
+                            <label for="pb" class="form-label">Default file input example</label>
+                            <input class="form-control" name="pb" type="file" id="pb" accept="image/jpeg, image/png">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="changePb" id="changePb" name="changePb"
+                                class="btn btn-primary">Hochladen</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    <!--Modal END -->
+
+    <?php if(isset($message) && $checkIfError == FALSE): ?>
+    <div class="container">
+        <div class="alert alert-danger alert-dismissible fade show">
+            <strong>Error!</strong> <?php echo $message; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?php if(isset($message) && $checkIfError == TRUE): ?>
+    <div class="container">
+        <div class="alert alert-success  alert-dismissible fade show">
+            <strong>Success!</strong> <?php echo $message; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    <?php endif; ?>
+
 
 
     <div class="container profilesection">

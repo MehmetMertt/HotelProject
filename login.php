@@ -11,15 +11,9 @@ require_once('inc/connect.php');
 /**
  *    Abmeldevorgang
  */
-if(isset($_GET['logout']))
+if(isset($_SESSION['id']))
 {
-    if(isset($_SESSION['id']))
-    {
-        $_SESSION = array();
-        session_destroy();
-    }
-
-    header('location: login.php');
+    header('location: dashboard.php');
     exit();
 }
 

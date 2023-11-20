@@ -6,9 +6,20 @@
   --grey: #888888;
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
   font-family: "Roboto";
   scroll-behavior: smooth;
+}
+
+.content {
+  padding-bottom: 500px;
 }
 
 .header {
@@ -155,15 +166,11 @@ body {
 }
 
 footer {
-  bottom: 0;
-}
-
-.footer {
+  padding: 40px;
+  margin-top: auto;
+  width: 100%;
   background-color: var(--blue);
   height: max-content;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
 }
 
 .nodec {
