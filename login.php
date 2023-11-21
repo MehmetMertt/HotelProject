@@ -71,19 +71,9 @@ else
     <title>Login</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="style/style.css" type="text/css" />
-    <style>
-    .center {
-        color: black;
-        text-align: center;
-    }
-
-    h1 {
-        text-align: center;
-        color: silver;
-    }
-    </style>
 </head>
 
 <body>
@@ -92,21 +82,26 @@ else
     ?>
 
 
-    <h1>Login</h1>
-    <form action="login.php" method="post">
-        <div class="center">
-            <label for="mail">E-Mail:</label><br />
-            <input type="text" id="mail" name="mail" required />
-        </div>
-        <br />
-        <div class="center">
-            <label for="password">Password:</label><br />
-            <input type="password" id="password" name="password" required />
-        </div>
-        <div class="center">
-            <button name="send" type="submit">Login</button>
-        </div>
+  
+
+<div class="body"> 
+    <div class="login-container">
+      <form class="login-form" action="login.php" method="post">
+      <h2>Login</h2>
+      <div class="input-group">
+        <label for="mail">E-mail</label>
+        <input type="text" id="mail" name="mail" placeholder="Enter your username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      
+      <button name="send" type="submit" class="button">Login</button>
     </form>
+  </div>
+</div>
+
 
 
     <?php
