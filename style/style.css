@@ -35,6 +35,7 @@ body {
 
 }
 
+
 .login-container {
   max-width: 350px;
   width: 90%;
@@ -348,3 +349,32 @@ footer {
 }
 
 /* END PROFILE */
+
+.back{
+  font-family: Arial, sans-serif;
+  background-color: #f3f3f3;
+}
+
+.container{
+  display: flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  
+}
+
+.font{
+
+  font-size: 30px;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-weight:700;
+}
+
+.margin{
+  margin-left: 1%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+
+}

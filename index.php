@@ -99,7 +99,7 @@
         <div class="card">
             <img src="img/pool.jpg" alt="pool">
             <h1>Pool</h1>
-            <p>Während ihren gesamten AUfenthalts, können Sie unseren Pool ohne weitere Kosten verwenden.</p>
+            <p>Während ihren gesamten Aufenthalts, können Sie unseren Pool ohne weitere Kosten verwenden.</p>
         </div>
 
         <div class="card">
