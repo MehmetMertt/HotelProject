@@ -380,7 +380,7 @@ footer {
   background-color: #f3f3f3;
 }
 
-.container {
+.container-impressum {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;

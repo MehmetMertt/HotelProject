@@ -89,6 +89,7 @@ if(isset($_SESSION['id']) == FALSE) {
 
     <div class="angebote">
         <h1>Angebote</h1>
+        <!--
         <p>Rabatte, Werbeaktionen und Sonderangebote für Sie</p>
         <div class="card-angebot">
             <h1>Machen Sie ihren bisher längsten Urlaub</h1>
@@ -97,6 +98,7 @@ if(isset($_SESSION['id']) == FALSE) {
             <img width="250px" src="img/family_laptop.jpg">
 
         </div>
+        --->
     </div>
 
 
