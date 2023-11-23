@@ -55,6 +55,7 @@ if(isset($_POST['changePb'])) {
     <title>Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="style/style.css" type="text/css" />
     <title>Continental</title>
@@ -71,8 +72,8 @@ if(isset($_POST['changePb'])) {
                 <h1>Persönliche Angaben</h1>
             </div>
             <div class="col-6">
-                <img data-bs-toggle="modal" data-bs-target="#exampleModal" id="picedit" height="75px"
-                    src="img/logo.png">
+                <img class="pb edit" data-bs-toggle="modal" data-bs-target="#exampleModal" id="picedit"
+                    src="<?php echo $pb?>">
             </div>
             <div class="col-12">
                 <p>Aktualisieren Sie Ihre Informationen und erfahren Sie, wie sie genutzt werden.</p>
@@ -92,7 +93,6 @@ if(isset($_POST['changePb'])) {
 
                     <form enctype="multipart/form-data" method="post" action="">
                         <div class="mb-3">
-                            <label for="pb" class="form-label">Default file input example</label>
                             <input class="form-control" name="pb" type="file" id="pb" accept="image/jpeg, image/png">
                         </div>
 
@@ -109,7 +109,7 @@ if(isset($_POST['changePb'])) {
     <!--Modal END -->
 
     <?php if(isset($message) && $checkIfError == FALSE): ?>
-    <div class="container">
+    <div class=" container">
         <div class="alert alert-danger alert-dismissible fade show">
             <strong>Error!</strong> <?php echo $message; ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

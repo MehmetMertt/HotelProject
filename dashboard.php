@@ -54,22 +54,24 @@ if(isset($_SESSION['id']) == FALSE) {
                             <div id="dropdown" class="dropdown-menu p-4">
                                 <div class="mb-2">
                                     <label for="exampleDropdownFormEmail2" class="form-label">Erwachsene</label>
-                                    <button onclick="increaseValue('adult')" name='incqty'>+</button>
-                                    <input id="adult" type='text' size='1' name='item' value='0' />
                                     <button onclick="decreaseValue('adult')" name='decqty'>-</button>
+                                    <input id="adult" type='text' size='1' name='item' value='0' />
+                                    <button onclick="increaseValue('adult')" name='incqty'>+</button>
+
                                 </div>
                                 <div class="mb-2">
                                     <label for="exampleDropdownFormPassword2" class="form-label">Kinder</label>
-                                    <button onclick="increaseValue('child')" name='incqty'>+</button>
-                                    <input id="child" type='text' size='1' name='item' value='0' />
                                     <button onclick="decreaseValue('child')" name='decqty'>-</button>
+                                    <input id="child" type='text' size='1' name='item' value='0' />
+                                    <button onclick="increaseValue('child')" name='incqty'>+</button>
+
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleDropdownFormPassword2" class="form-label">Haustiere</label>
-
-                                    <button onclick="increaseValue('pets')" name='incqty'>+</button>
-                                    <input id="pets" type='text' size='1' name='item' value='0' />
                                     <button onclick="decreaseValue('pets')" name='decqty'>-</button>
+                                    <input id="pets" type='text' size='1' name='item' value='0' />
+                                    <button onclick="increaseValue('pets')" name='incqty'>+</button>
+
                                 </div>
 
                                 <button data-toggle="dropdown" onclick="removeDropdown()"
@@ -78,7 +80,7 @@ if(isset($_SESSION['id']) == FALSE) {
                         </div>
                     </div>
                     <div class="d-flex col-lg-3 col-sm-12">
-                        <button type="button" class="btn btn-primary btn-lg">Suchen</button>
+                        <button type="button" style="width: 100%;" class="btn btn-primary btn-lg">Suchen</button>
                     </div>
                 </div>
             </div>

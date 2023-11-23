@@ -82,25 +82,36 @@ else
     ?>
 
 
-  
+    <div class="body">
 
-<div class="body"> 
-    <div class="login-container">
-      <form class="login-form" action="login.php" method="post">
-      <h2>Login</h2>
-      <div class="input-group">
-        <label for="mail">E-mail</label>
-        <input type="text" id="mail" name="mail" placeholder="Enter your username" required>
-      </div>
-      <div class="input-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required>
-      </div>
-      
-      <button name="send" type="submit" class="button">Login</button>
-    </form>
-  </div>
-</div>
+        <?php if(isset($error)): ?>
+        <div class="container">
+            <div class="alert alert-danger alert-dismissible fade show">
+                <strong>Error!</strong> <?php echo $error; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+        <?php endif; ?>
+
+
+
+
+        <div class="login-container">
+            <form class="login-form" action="login.php" method="post">
+                <h2>Login</h2>
+                <div class="input-group">
+                    <label for="mail">E-mail</label>
+                    <input type="text" id="mail" name="mail" placeholder="Enter your username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button name="send" type="submit" class="button">Login</button>
+            </form>
+        </div>
+    </div>
 
 
 

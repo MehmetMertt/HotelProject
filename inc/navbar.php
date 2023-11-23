@@ -1,3 +1,19 @@
+<?php
+if(isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];
+    $directory = "upload/" . $id;
+    if(file_exists($directory) && file_exists($directory . '/pb.jpg')) {
+        $pb = $directory . "/pb.jpg";
+    } else{
+     $pb = "upload/pb.png";
+    }
+} else {
+    $pb = "upload/pb.png";
+
+}
+
+?>
+
 <nav id='navbar' class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php"><img height="50px" src="img/logo.png"></a>
@@ -43,7 +59,7 @@
                 <li class="nav-item dropdown dropstart">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <img height="25px" src="img/logo.png">
+                        <img class="pb" style="height: 25px; width:25px" src="<?php echo $pb;?>">
                         <?php echo $_SESSION['vorname']; echo ' '; echo $_SESSION['nachname']; ?>
                     </a>
                     <ul class="dropdown-menu">

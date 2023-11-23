@@ -18,29 +18,49 @@ body {
   scroll-behavior: smooth;
 }
 
-
-
-  
 /*Login start*/
-   
-.body{
-  
+
+.pb {
+  border-radius: 100%;
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+}
+
+.edit {
+  border-color: green;
+  border-style: solid;
+  display: block;
+}
+
+.overlay {
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.con {
+  position: relative;
+  width: 50%;
+  max-width: 300px;
+}
+
+.body {
   font-family: Arial, sans-serif;
   background-color: #f3f3f3;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-
-
 }
-
 
 .login-container {
   max-width: 350px;
   width: 90%;
 }
-
 
 .login-form {
   background-color: #fff;
@@ -330,10 +350,15 @@ footer {
 
 /*  MANAGE */
 
-/* PROFILE */
-
-.profileelement > * {
+.bodyhelp {
+  background-color: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
+/* PROFILE */
 
 .infos {
   margin: 50px;
@@ -350,31 +375,27 @@ footer {
 
 /* END PROFILE */
 
-.back{
+.back {
   font-family: Arial, sans-serif;
   background-color: #f3f3f3;
 }
 
-.container{
+.container {
   display: flex;
-  justify-content:space-around;
-  flex-wrap:wrap;
-  
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
-.font{
-
+.font {
   font-size: 30px;
   text-align: center;
   margin-top: 30px;
   margin-bottom: 30px;
-  font-weight:700;
+  font-weight: 700;
 }
 
-.margin{
+.margin {
   margin-left: 1%;
   margin-top: 30px;
   margin-bottom: 30px;
-
-
 }
