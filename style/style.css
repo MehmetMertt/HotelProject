@@ -308,6 +308,10 @@ footer {
   min-width: 250px;
 }
 
+#dropdown2 {
+  min-width: 200px;
+}
+
 /* Dashbaord */
 
 /*  MANAGE */
@@ -329,7 +333,6 @@ footer {
 
 .auswahlcenter {
   padding-top: 25px;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -400,6 +403,69 @@ footer {
   margin-bottom: 30px;
 }
 
-#dropdownMenuClickable {
-  font-size: 5px;
+.zimmer {
+  padding: 5px;
+  margin: auto;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  width: 50%;
+  min-width: 800px;
+  align-items: center;
+}
+
+.zimmer h3 {
+  float: right;
+  margin: 10px;
+}
+
+.zimmer img {
+  border-radius: 16px;
+}
+
+.zimmer p {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 1rem;
+}
+
+.date {
+  max-width: 600px;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.gebucht {
+  border: 1px solid var(--blue);
+  width: fit-content;
+  box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
+  padding: 10px;
+}
+
+.summary > img {
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.summary > button {
+}
+
+#roomdetails {
+  margin: 10px 0px 10px 0px;
+  width: 250px;
+}
+
+#booknow {
+  margin: 10px 0px 10px 0px;
+  width: 100%;
+}
+
+.block {
+  display: none;
 }
