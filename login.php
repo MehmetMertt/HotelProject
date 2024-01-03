@@ -25,30 +25,36 @@ if(isset($_POST['send']))
     //Benutzereingaben validieren
     if(filter_var($user_email, FILTER_VALIDATE_EMAIL) && !empty($user_password))
     {
-        $query = $db->prepare('SELECT `id`,`vname`,`nname` FROM `users` WHERE `mail` = ? AND `passwort` = ?');
-        $query->bind_param('ss', $_POST['mail'], $_POST['password']);
+        
+        $query = $db->prepare('SELECT `id`,`vname`,`nname`,`passwort`,`isAdmin` FROM `users` WHERE mail = ?');
+        $query->bind_param('s', $user_email);
         $query->execute();
         $query->store_result();
-        $query->bind_result($id, $vorname, $nachname);
-
-        //Sind Benutzerdaten vorhanden und korrekt?
-        if($query->num_rows == 1)
-        {
-            $query->fetch();
-            $_SESSION['id'] = $id;
-            $_SESSION['vorname'] = $vorname; 
-            $_SESSION['nachname'] = $nachname;
-            header('location: dashboard.php');
-            exit();
-        }
-        else
-        {
+        $query->bind_result($id, $vorname, $nachname,$dbpassword,$isAdmin);
+        $query->fetch();
+        $hashed_user_password = hash("sha256",$user_password);
+        if($hashed_user_password == $dbpassword) {
+            if($query->num_rows == 1)
+            {
+                $_SESSION['id'] = $id;
+                $_SESSION['isAdmin'] = $isAdmin;
+                $_SESSION['vorname'] = $vorname; 
+                $_SESSION['nachname'] = $nachname;
+                header('location: dashboard.php');
+                exit();
+            }
+            else
+            {
+                $error = 'Ihre Anmeldedaten sind nicht korrekt. Bitte wiederholen Sie Ihre Eingabe.';
+            }
+        } else {
             $error = 'Ihre Anmeldedaten sind nicht korrekt. Bitte wiederholen Sie Ihre Eingabe.';
+
         }
     }
     else
     {
-        $error = 'Bitte füllen Sie alle Felder korrekt aus.';
+        $error = 'Ihre Anmeldedaten sind nicht korrekt. Bitte wiederholen Sie Ihre Eingabe.';
     }
 }
 else
@@ -101,7 +107,7 @@ else
                 <h2>Login</h2>
                 <div class="input-group">
                     <label for="mail">E-mail</label>
-                    <input type="text" id="mail" name="mail" placeholder="Enter your username" required>
+                    <input type="text" id="mail" name="mail" placeholder="Enter your E-Mail" required>
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>

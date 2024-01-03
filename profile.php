@@ -35,8 +35,20 @@ if(isset($_POST['changePb'])) {
           
 }
 
+define('SECURE', true);
+require_once('inc/connect.php');
+
+$id = $_SESSION['id'];
+$query = $db->prepare("SELECT mail,vname,nname,geschlecht,adresse,stadt,plz FROM users WHERE id = ?");
+
+$query->bind_param('i',$id);
 
 
+$query->execute();
+
+$query->bind_result($mail, $vorname, $nachname,$geschlecht,$adresse,$stadt,$plz);
+
+$query->fetch();
 
 
 ?>
@@ -131,46 +143,153 @@ if(isset($_POST['changePb'])) {
     <div class="container profilesection">
         <div class="row profileelem">
             <div class="col-4"><span>Name</span></div>
-            <div class="col-4"><span>Mehmet Mert</span></div>
-            <div class="col-4"><a href="#"><span>Bearbeiten</span></a></div>
-
+            <div class="col-4"><span><?php echo $vorname . " " . $nachname; ?></span></div>
+            <div class="col-4" onclick="edit(0);"><span>Bearbeiten</span></div>
             <hr>
+        </div>
+
+        <div class="row editdata block">
+            <br>
+            <form class="row">
+                <div class="col-auto">
+                    <label for="vornamefield" class="form-label">Vorname</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="vornamefield">
+                </div>
+                <div class="col-auto">
+                    <label for="nachnamefield" class="form-label">Nachname</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="nachnamefield">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
+
         </div>
 
         <div class="row profileelem">
             <div class="col-4"><span>E-Mail</span></div>
-            <div class="col-4"><span>mehmetmert@test.com</span></div>
-            <div class="col-4"><a href="#"><span>Bearbeiten</span></a></div>
-
+            <div class="col-4"><span><?php echo $mail;?></span></div>
+            <div class="col-4" onclick="edit(1);"><span>Bearbeiten</span></div>
             <hr>
+        </div>
+
+        <div class="row editdata block">
+            <br>
+            <form class="row">
+                <div class="col-auto">
+                    <label for="vornamefield" class="form-label">Vorname</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="vornamefield">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
         </div>
 
         <div class="row profileelem">
             <div class="col-4"><span>Passwort</span></div>
             <div class="col-4"><span>*********</span></div>
-            <div class="col-4"><a href="#"><span>Bearbeiten</span></a></div>
+            <div class="col-4" onclick="edit(2);"><span>Bearbeiten</span></div>
             <hr>
         </div>
 
-        <div class="row profileelem">
+        <div class="row editdata block">
+            <br>
+            <form class="row">
+                <div class="col-auto">
+                    <label for="vornamefield" class="form-label">Password</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="vornamefield">
+                </div>
+                <div class="col-auto">
+                    <label for="vornamefield" class="form-label">Password again</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="vornamefield">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
+        </div>
+
+        <div class="row profileelem block">
             <div class="col-4"><span>Adresse</span></div>
-            <div class="col-4"><span>Ringstraße 01</span></div>
-            <div class="col-4"><a href="#"><span>Bearbeiten</span></a></div>
+            <div class="col-4"><span><?php echo $adresse;?></span></div>
+            <div class="col-4" onclick="edit(3);"><span>Bearbeiten</span></div>
             <hr>
+        </div>
+
+        <div class="row editdata block">
+            <br>
+            <form class="row">
+                <div class="col-auto">
+                    <label for="vornamefield" class="form-label">Adresse</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="vornamefield">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
         </div>
 
         <div class="row profileelem">
             <div class="col-4"><span>Stadt</span></div>
-            <div class="col-4"><span>Wien</span></div>
-            <div class="col-4"><a href="#"><span>Bearbeiten</span></a></div>
+            <div class="col-4"><span><?php echo $stadt;?></span></div>
+            <div class="col-4" onclick="edit(4);"><span>Bearbeiten</span></div>
             <hr>
+        </div>
+
+        <div class="row editdata block">
+            <br>
+            <form class="row">
+                <div class="col-auto">
+                    <label for="vornamefield" class="form-label">City</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="vornamefield">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
         </div>
 
         <div class="row profileelem">
             <div class="col-4"><span>Postleitzahl</span></div>
-            <div class="col-4"><span>1010</span></div>
-            <div class="col-4"><a href="#"><span>Bearbeiten</span></a></div>
+            <div class="col-4"><span><?php echo $plz;?></span></div>
+            <div class="col-4" onclick="edit(5);"><span>Bearbeiten</span></div>
             <hr>
+        </div>
+
+        <div class="row editdata block">
+            <br>
+            <form class="row">
+                <div class="col-auto">
+                    <label for="vornamefield" class="form-label">PLZ</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="vornamefield">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
         </div>
     </div>
 
@@ -180,5 +299,11 @@ if(isset($_POST['changePb'])) {
     ?>
 
 </body>
+
+<script>
+function edit(n) {
+    document.getElementsByClassName('editdata')[n].classList.remove("block");
+}
+</script>
 
 </html>

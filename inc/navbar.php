@@ -1,7 +1,6 @@
 <?php
 if(isset($_SESSION['id'])) {
-    $id = $_SESSION['id'];
-    $directory = "upload/" . $id;
+    $directory = "upload/" . $_SESSION['id'];
     if(file_exists($directory) && file_exists($directory . '/pb.jpg')) {
         $pb = $directory . "/pb.jpg";
     } else{
@@ -35,7 +34,7 @@ if(isset($_SESSION['id'])) {
                 </li>
                 <?php endif; ?>
 
-                <?php if(isset($_SESSION['id']) && $_SESSION['id'] == 1) : ?>
+                <?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1) : ?>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"

@@ -18,6 +18,10 @@ if(isset($_POST['getZimmer'])) {
     $park = 0;
     $break = 0;
 
+    if((int)$adults <= 0){
+        $fehler = TRUE;
+        $message = "Es muss mindestens 1 Erwachsener ausgewählt sein!";
+    }
 
     if(isset($_POST['park'])) {
         $park = 1;        
@@ -31,13 +35,13 @@ if(isset($_POST['getZimmer'])) {
     $kostenparkplatz = 10;
     $kostenfruestueck = 7;
 
-    if(!empty($kategorie) && !empty($adults)) {
+    if(!empty($kategorie) && !empty($adults) && !isset($message)) {
         
         if(is_null($children)) {
             $children = 0;
         }
         $pets2 = (int)$pets;
-        $human = (int)$adults;
+        $human = (int)$adults + (int)$children;
         $kategorie2 = (int)$kategorie;
 
         $query = $db->prepare('
@@ -50,24 +54,28 @@ if(isset($_POST['getZimmer'])) {
         ');
         $query->bind_param('iii', $pets2, $human,$kategorie2);
         $query->execute();
+
         $allezimmer = $query->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        if(isset($_POST['park']) || isset($_POST['breakfast']) ) {
+        if(empty($allezimmer)) {
+            $message = "Es wurden leider keine Zimmer gefunden!";
+        } else {
+            if(isset($_POST['park']) || isset($_POST['breakfast']) ) {
 
-            foreach ($allezimmer as $key => $room) {
-                if (isset($_POST['park'])) {
-                    $allezimmer[$key]['preisProTag'] = $allezimmer[$key]['preisProTag'] + $kostenparkplatz; // Update price to 150 for room 1
-                }
-
-                if(isset($_POST['breakfast'])) {
-                    $allezimmer[$key]['preisProTag'] = $allezimmer[$key]['preisProTag'] + $kostenfruestueck; // Update price to 150 for room 1
-                }
-             }
-
+                foreach ($allezimmer as $key => $room) {
+                    if (isset($_POST['park'])) {
+                        $allezimmer[$key]['preisProTag'] = $allezimmer[$key]['preisProTag'] + $kostenparkplatz; // Update price to 150 for room 1
+                    }
+    
+                    if(isset($_POST['breakfast'])) {
+                        $allezimmer[$key]['preisProTag'] = $allezimmer[$key]['preisProTag'] + $kostenfruestueck; // Update price to 150 for room 1
+                    }
+                 }
+    
+            }
         }
+
   
-    } else {
-        echo "Ok";
     }
 
    
@@ -106,13 +114,12 @@ $currentstep = 1
         <h1>Wohin als Nächstes, <?php echo $_SESSION['vorname']; ?>
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <div class=" auswahlcenter">
+                <div class="auswahlcenter">
                     <div class="row auswahl">
 
                         <div class="d-flex col-lg-3 col-sm-12">
-                            <select name="zimmerart" type="text" class="form-control" class="form-select form-select-sm"
-                                aria-label="Small select example">
-                                <option selected>Welches Zimmer?</option>
+                            <select value="test" name="zimmerart" type="text" class="form-control"
+                                class="form-select form-select-sm" aria-label="Small select example" required>
                                 <option value="1">Luxuszimmer</option>
                                 <option value="2">Doppelzimmer</option>
                                 <option value="3">Einzelzimmer</option>
@@ -205,22 +212,41 @@ $currentstep = 1
                 </div>
             </form>
 
-            <?php if(isset($_POST['getZimmer'])) : ?>
+            <?php if(isset($_POST['getZimmer']) && !isset($message)) : ?>
+
+
             <?php foreach ($allezimmer as $zimmer) : ?>
-            <div class="zimmer">
-                <img alt="zimmer" height="183px" width="275px" src="<?php echo $zimmer['bildpfad'] ?>">
-                <h2>Luxuszimmer</h2>
-                <h3><?php echo $zimmer['preisProTag'] .'€' ?></h3>
-                <p><?php echo $zimmer['beschreibung'] ?>
-                </p>
-                <a href="<?php echo "zimmerdetails.php?id=" . $zimmer['zimmerid'] ?>"> Mehr Informationen</a>
-                <br>
-                <br>
-                <a
-                    href="<?php echo "buchen.php?id=" . $zimmer['zimmerid'] . "&er=" . $adults . "&ch=" . $children . "&pets=" . $pets . "&park=" . $park . "&break=" . $break ?>"><button
-                        type="button" class="btn btn-primary">Buchen</button></a>
-            </div>
+            <form action="buchen.php" method="post">
+                <input type="hidden" name="zimmerID" value="<?php echo $zimmer['zimmerid'] ?>" />
+                <input type="hidden" name="er" value="<?php echo $adults?>" />
+                <input type="hidden" name="ch" value="<?php echo $children ?>" />
+                <input type="hidden" name="pets" value="<?php echo $pets ?>" />
+                <input type="hidden" name="park" value="<?php echo $park ?>" />
+                <input type="hidden" name="break" value="<?php echo $break ?>" />
+                <div class="zimmer">
+                    <img alt="zimmer" height="183px" width="275px" src="<?php echo $zimmer['bildpfad'] ?>">
+                    <h2>Luxuszimmer</h2>
+                    <h3><?php echo $zimmer['preisProTag'] .'€' ?></h3>
+                    <p><?php echo $zimmer['beschreibung'] ?>
+                    </p>
+                    <a href="<?php echo "zimmerdetails.php?id=" . $zimmer['zimmerid'] ?>"> Mehr Informationen</a>
+                    <br>
+                    <br>
+                    <button type="submit" name="book" class="btn btn-primary">Buchen</button></a>
+                </div>
+            </form>
             <?php endforeach; ?>
+            <?php endif; ?>
+
+
+            <?php if(isset($message)): ?>
+            <br>
+            <div class="container">
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <strong>Error!</strong> <?php echo $message; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
             <?php endif; ?>
 
 
