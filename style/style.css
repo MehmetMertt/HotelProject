@@ -474,3 +474,8 @@ h1 {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+.bearbeiten:hover {
+  color: var(--navy);
+  cursor: pointer;
+}

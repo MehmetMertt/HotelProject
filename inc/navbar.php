@@ -1,4 +1,6 @@
 <?php
+
+
 if(isset($_SESSION['id'])) {
     $directory = "upload/" . $_SESSION['id'];
     if(file_exists($directory) && file_exists($directory . '/pb.jpg')) {
@@ -6,9 +8,6 @@ if(isset($_SESSION['id'])) {
     } else{
      $pb = "upload/pb.png";
     }
-} else {
-    $pb = "upload/pb.png";
-
 }
 
 ?>
@@ -43,7 +42,8 @@ if(isset($_SESSION['id'])) {
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">News-Beitrage erstellen</a></li>
-                        <li><a class="dropdown-item" href="#">User-Bearbeiten</a></li>
+                        <li><a class="dropdown-item" href="users.php">User-Bearbeiten</a></li>
+
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -67,7 +67,7 @@ if(isset($_SESSION['id'])) {
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">#</a></li>
+                        <li><a class="dropdown-item" href="reservierung.php">My Reservations</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

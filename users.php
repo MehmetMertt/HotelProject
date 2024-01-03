@@ -1,61 +1,47 @@
 <?php
 
 session_start();
-if(isset($_SESSION['id']) == FALSE) {
+define('SECURE', true);
+require_once('inc/connect.php');
+$admin = $_SESSION['isAdmin'];
+if(isset($_SESSION['id']) == FALSE || $_SESSION['isAdmin'] == 0) {
     header('location: login.php');
     exit();
 }
 
 
-if(isset($_POST['changePb'])) {
-        
-        $pb = $_FILES["pb"];
-        $checkIfError = TRUE;
-    
-        if($pb["size"] > 5000000) { //5 MB
-             $message = "Sorry, your uploaded image is too large!";
-             $checkIfError = FALSE;
+$query = $db->prepare('SELECT * FROM `users`');
+$query->execute();
+$alleusers = $query->get_result()->fetch_all(MYSQLI_ASSOC);
 
+
+if(empty($alleusers)) {
+    $message = "There are no users";
+} 
+
+if(isset($_GET['userID'])) {
+    $userID = trim(htmlspecialchars($_GET['userID']));
+    
+    foreach($alleusers as $user) {
+        if($user['id'] == $userID) {
+            $currentuser = $user;
+            break;
         }
-    
-        if(strtolower($pb["type"]) != "image/jpeg" && strtolower($pb["type"]) != "image/png") {
-            $message = "Sorry, Please only upload jpeg/png Files!";
-            $checkIfError = FALSE;
-        } 
-    
-    
-        if($checkIfError == TRUE) {
-            $path = 'upload/' . $_SESSION['id'];
-            if(file_exists($path) == FALSE) {
-                mkdir($path,0777,true);
-            }
-        
-            if(move_uploaded_file($_FILES['pb']['tmp_name'],$path . '/pb.jpg')){
-                 $message = "You file was successfully uploaded!";
-            } else {
-                $message = "There was a error while uploading your file!";
-                $checkIfError == FALSE;
-            };
-        }
-          
+    }
+
+    $id = $user['id'];
+    $mail = $user['mail'];
+    $vorname = $user['vname'];
+    $nachname = $user['nname'];
+    $geschlecht = $user['geschlecht'];
+    $passwort = $user['passwort'];
+    $adresse = $user['adresse'];
+    $stadt = $user['stadt'];
+    $plz = $user['plz'];
+    $isAdmin = $user['isAdmin'];
+
 }
 
-define('SECURE', true);
-require_once('inc/connect.php');
-
-$id = $_SESSION['id'];
-$query = $db->prepare("SELECT mail,vname,nname,geschlecht,adresse,stadt,plz,passwort FROM users WHERE id = ?");
-
-$query->bind_param('i',$id);
-
-
-$query->execute();
-$query->store_result();
-
-
-$query->bind_result($mail, $vorname, $nachname,$geschlecht,$adresse,$stadt,$plz,$passwort);
-
-$query->fetch();
 
 
 if(isset($_POST['update_mail']) && isset($_POST['emailfield'])) {
@@ -84,8 +70,7 @@ if(isset($_POST['update_mail']) && isset($_POST['emailfield'])) {
                     $checkIfError = FALSE;
                 } else {
                     $query = $db->prepare("UPDATE users SET mail=? WHERE id=?");
-                    $sessionid = $_SESSION['id'];
-                    $query->bind_param('ss',$new_email,$sessionid);
+                    $query->bind_param('ss',$new_email,$id);
                     $query->execute();
                     $message = "Mail is updated";
                     $checkIfError = TRUE;
@@ -105,7 +90,7 @@ if(isset($_POST['update_name']) && (isset($_POST['vornamefield']) && isset($_POS
     $new_nachname = trim(htmlspecialchars($_POST['nachnamefield']));
 
 
-    if(empty($new_adresse)) {
+    if(empty($new_nachname) || empty($new_vorname)) {
         $message = "Surname/Name cannot be empty!";
         $checkIfError = FALSE;
     } else {
@@ -119,8 +104,7 @@ if(isset($_POST['update_name']) && (isset($_POST['vornamefield']) && isset($_POS
                 $checkIfError = FALSE;
             } else {
                     $query = $db->prepare("UPDATE users SET nname=?,vname=? WHERE id=?");
-                    $sessionid = $_SESSION['id'];
-                    $query->bind_param('ssi',$new_nachname,$new_vorname,$sessionid);
+                    $query->bind_param('ssi',$new_nachname,$new_vorname,$id);
                     $query->execute();
                     $message = "You informations have been updated!";
                     $checkIfError = TRUE;
@@ -147,8 +131,7 @@ if(isset($_POST['update_adress']) && (isset($_POST['adressfield']))) {
             $checkIfError = FALSE;
         } else {
                 $query = $db->prepare("UPDATE users SET adresse=? WHERE id=?");
-                $sessionid = $_SESSION['id'];
-                $query->bind_param('si',$new_adresse,$sessionid);
+                $query->bind_param('si',$new_adresse,$id);
                 $query->execute();
                 $message = "You Adress have been updated!";
                 $checkIfError = TRUE;
@@ -174,8 +157,7 @@ if(isset($_POST['update_city']) && (isset($_POST['cityfield']))) {
             $checkIfError = FALSE;
         } else {
                 $query = $db->prepare("UPDATE users SET stadt=? WHERE id=?");
-                $sessionid = $_SESSION['id'];
-                $query->bind_param('si',$new_city,$sessionid);
+                $query->bind_param('si',$new_city,$id);
                 $query->execute();
                 $message = "You Adress have been updated!";
                 $checkIfError = TRUE;
@@ -199,8 +181,7 @@ if(isset($_POST['update_plz']) && (isset($_POST['plzfield']))) {
             $checkIfError = FALSE;
         } else {
                 $query = $db->prepare("UPDATE users SET plz=? WHERE id=?");
-                $sessionid = $_SESSION['id'];
-                $query->bind_param('si',$new_plz,$sessionid);
+                $query->bind_param('si',$new_plz,$id);
                 $query->execute();
                 $message = "You PLZ have been updated!";
                 $checkIfError = TRUE;
@@ -224,8 +205,7 @@ if(isset($_POST['update_plz']) && (isset($_POST['plzfield']))) {
             $checkIfError = FALSE;
         } else {
                 $query = $db->prepare("UPDATE users SET plz=? WHERE id=?");
-                $sessionid = $_SESSION['id'];
-                $query->bind_param('si',$new_plz,$sessionid);
+                $query->bind_param('si',$new_plz,$id);
                 $query->execute();
                 $message = "You PLZ have been updated!";
                 $checkIfError = TRUE;
@@ -255,8 +235,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
                 $message = "You did not change your password!";
             } else {
                 $query = $db->prepare("UPDATE users SET passwort=? WHERE id=?");
-                $sessionid = $_SESSION['id'];
-                $query->bind_param('si',$hashed_new_pw,$sessionid);
+                $query->bind_param('si',$hashed_new_pw,$id);
                 $query->execute();
                 $message = "Your password have been updated!";
                 $checkIfError = TRUE;
@@ -267,7 +246,38 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
         }
     }   
 }
+
+
+if(isset($_POST['update_isAdmin']) && (isset($_POST['isAdminField']))) {
+
+    $new_isAdmin = trim(htmlspecialchars($_POST['isAdminField']));
+
+        //0 is considered empty!
+
+        if($isAdmin != 1 && $isAdmin != 0) {
+            $message = "isAdmin can only be 0 (is not Admin) or 1 (is Admin)";
+            $checkIfError = FALSE;
+        } else {
+            if($isAdmin == $new_isAdmin) {
+                $message = "You did not change isAdmin";
+                $checkIfError = FALSE;
+            } else {
+                    $query = $db->prepare("UPDATE users SET isAdmin=? WHERE id=?");
+                    $query->bind_param('ii',$new_isAdmin,$id);
+                    $query->execute();
+                    $message = "isAdmin is updated";
+                    $checkIfError = TRUE;
+                    $isAdmin = $new_isAdmin;
+                    $_SESSION['isAdmin'] = (int)$isAdmin;
+            }
+        }
+
+    
+}
+
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -292,49 +302,56 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
 <body>
 
     <?php
-    include 'inc/navbar.php'
+    include 'inc/navbar.php';
     ?>
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <h1>Persönliche Angaben</h1>
-            </div>
-            <div class="col-6">
-                <img class="pb edit" data-bs-toggle="modal" data-bs-target="#exampleModal" id="picedit"
-                    src="<?php echo $pb?>">
-            </div>
-            <div class="col-12">
-                <p>Aktualisieren Sie Ihre Informationen und erfahren Sie, wie sie genutzt werden.</p>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Wählen Sie ein Bild zum Hochladen aus</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+    <?php if(!isset($message) && !isset($_GET['userID'])) : ?>
+    <?php
+      $count = 0;  
+    ?>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">userID</th>
+                <th scope="col">E-Mail</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sex</th>
+                <th scope="col">Adress</th>
+                <th scope="col">City</th>
+                <th scope="col">PLZ</th>
+                <th scope="col">isAdmin</th>
+                <th scope="col">isActive</th>
+                <th scope="col"><i class="bi bi-pencil"></i></th>
 
-                    <form enctype="multipart/form-data" method="post" action="">
-                        <div class="mb-3">
-                            <input class="form-control" name="pb" type="file" id="pb" accept="image/jpeg, image/png">
-                        </div>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($alleusers as $user) : ?>
+            <?php
+                $count = $count + 1;
+                ?>
+            <tr>
+                <th scope="row"><?php echo $count ?></th>
+                <td><?php echo $user['id']; ?></td>
+                <td><?php echo $user['mail']; ?></td>
+                <td><?php echo $user['vname']; ?></td>
+                <td><?php echo $user['nname']; ?></td>
+                <td><?php echo $user['geschlecht']; ?></td>
+                <td><?php echo $user['adresse']; ?></td>
+                <td><?php echo $user['stadt']; ?></td>
+                <td><?php echo $user['plz']; ?></td>
+                <td><?php echo $user['isAdmin'] == '1' ? '✔️' : '❌'; ?></td>
+                <td>x</td>
+                <td><a href="users.php?userID=<?php echo $user['id']?>">Bearbeiten</a></td>
+                </td>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="changePb" id="changePb" name="changePb"
-                                class="btn btn-primary">Hochladen</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Modal END -->
+            </tr>
+        </tbody>
+        <?php endforeach; ?>
+    </table>
+    <?php endif; ?>
 
     <?php if(isset($message) && $checkIfError == FALSE): ?>
     <div class=" container">
@@ -355,6 +372,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
     <?php endif; ?>
 
 
+    <?php if(isset($_GET['userID'])) :?>
 
     <div class="container profilesection">
         <div class="row profileelem">
@@ -366,7 +384,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
 
         <div class="row editdata block">
             <br>
-            <form action="profile.php" method="post" class="row">
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
                 <div class="col-sm-6 col-md-auto">
                     <label for="vornamefield" class="form-label">Vorname</label>
                 </div>
@@ -398,7 +416,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
 
         <div class="row editdata block">
             <br>
-            <form action="profile.php" method="post" class="row">
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
                 <div class="col-auto">
                     <label for="emailfield" class="form-label">E-Mail</label>
                 </div>
@@ -422,7 +440,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
 
         <div class="row editdata block">
             <br>
-            <form action="profile.php" method="post" class="row">
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
                 <div class="col-lg-auto col-md-6">
                     <label for="passwordfield" class="form-label">Password</label>
                 </div>
@@ -451,7 +469,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
 
         <div class="row editdata block">
             <br>
-            <form action="profile.php" method="post" class="row">
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
                 <div class="col-auto">
                     <label for="adressefield" class="form-label">Adresse</label>
                 </div>
@@ -475,7 +493,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
 
         <div class="row editdata block">
             <br>
-            <form action="profile.php" method="post" class="row">
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
                 <div class="col-auto">
                     <label for="cityfield" class="form-label">City</label>
                 </div>
@@ -499,7 +517,7 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
 
         <div class="row editdata block">
             <br>
-            <form action="profile.php" method="post" class="row">
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
                 <div class="col-auto">
                     <label for="plzfield" class="form-label">PLZ</label>
                 </div>
@@ -512,11 +530,36 @@ if(isset($_POST['update_pw']) && isset($_POST['pwfield']) && isset($_POST['pwfie
             </form>
             <br>
         </div>
+
+        <div class="row profileelem">
+            <div class="col-4"><span>isAdmin</span></div>
+            <div class="col-4"><span><?php echo $isAdmin;?></span></div>
+            <div class="col-4" onclick="edit(6);"><span class="bearbeiten">Bearbeiten</span></div>
+            <hr>
+        </div>
+
+        <div class="row editdata block">
+            <br>
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
+                <div class="col-auto">
+                    <label for="isAdminField" class="form-label">IsAdmin</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" name="isAdminField" class="form-control" value="<?php echo $isAdmin;?>"
+                        id="isAdminField">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" name="update_isAdmin" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
+        </div>
+
     </div>
+    <?php endif ?>
 
-
-    <?php 
-    include 'inc/footer.php'
+    <?php
+    include 'inc/footer.php';
     ?>
 
 </body>
