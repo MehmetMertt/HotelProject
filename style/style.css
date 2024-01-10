@@ -479,3 +479,57 @@ h1 {
   color: var(--navy);
   cursor: pointer;
 }
+
+.news img {
+  width: 250px;
+  height: 150px;
+  display: block;
+  margin: auto;
+}
+
+.news {
+  width: 256px;
+  padding-bottom: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  height: auto;
+  margin: 30px;
+  border: 2px solid var(--navy);
+  word-wrap: break-word;
+}
+
+.newsinhalt {
+  color: var(--grey);
+}
+
+.newsdatum {
+  float: left;
+  color: var(--blue);
+  padding: 0px;
+  margin: 0px;
+}
+
+.gotonews {
+  float: right;
+  margin: 5px;
+}
+
+.read {
+  max-width: 1000px;
+  margin: 50px;
+}
+
+.read > .title {
+  float: left;
+}
+
+.read > .date {
+  float: left;
+  margin-right: 25px;
+}
+
+.read > img {
+  max-height: 500px;
+  max-width: auto;
+  margin: 20px;
+}

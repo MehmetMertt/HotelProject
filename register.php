@@ -8,7 +8,7 @@ if(isset($_SESSION['id'])) {
 if(isset($_POST['register'])) {
         //https://stackoverflow.com/questions/53889927/easiest-way-to-check-if-multiple-post-parameters-are-set
         $params_needed = ["vorname", "nachname", "geschlecht",
-        "email", "pw","pw2", "adress", "city", "plz", "nutz"];
+        "email", "pw","pw2", "adress", "city", "plz", "nutz", "username"];
         $given_params = array_keys($_POST);
     
         $missing_params = array_diff($params_needed, $given_params);
@@ -16,6 +16,7 @@ if(isset($_POST['register'])) {
         if(!empty($missing_params)) {
             $message = "Bitte füllen Sie alle Fehler aus!";
         } else {
+            $username = trim(htmlspecialchars($_POST['username']));
             $vorname = trim(htmlspecialchars($_POST['vorname'])); //
             $nachname = trim(htmlspecialchars($_POST['nachname'])); //
             $geschlecht = trim(htmlspecialchars($_POST['geschlecht']));
@@ -27,48 +28,77 @@ if(isset($_POST['register'])) {
             $plz = trim(htmlspecialchars($_POST['plz']));
             $nutz = trim(htmlspecialchars($_POST['nutz']));
 
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $message = "Please use a real email";
-              } else {
-                    if(preg_match("/^[a-zA-Z\s]+$/",$nachname) == false || preg_match("/^[a-zA-Z\s]+$/",$vorname) == false) {
-                        $message = "Please use a real name!";
-                    } else {
-                        if($pw != $pw2) {
-                            $message = "The passwords are not equal!";
+            if(empty($username) == TRUE || empty($vorname) == TRUE || empty($nachname) == TRUE || empty($geschlecht) == TRUE || empty($email) == TRUE || empty($pw) == TRUE || empty($pw2) == TRUE || empty($adress) == TRUE || empty($city) == TRUE || empty($plz) == TRUE || empty($nutz) == TRUE) {
+                $message = "Please will every field!";
+            } else {
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $message = "Please use a real email";
+                  } else {
+                        if(preg_match("/^[a-zA-Z\s]+$/",$nachname) == false || preg_match("/^[a-zA-Z\s]+$/",$vorname) == false) {
+                            $message = "Please use a real name!";
                         } else {
-                            $geschlecht_array = array("m","f","d");
-                            if(!in_array($geschlecht,$geschlecht_array)) {
-                                $message = "Please choose Male, Female or Divers";
+                            if($pw != $pw2) {
+                                $message = "The passwords are not equal!";
                             } else {
-                                define('SECURE', true);
-                                require_once('inc/connect.php');
-    
-                                if($query = $db->prepare('SELECT id, mail from users WHERE mail = ?;')) {
-                                    $query->bind_param('s', $email);
-                                    $query->execute();
-                                    $query->store_result();
-                                    
-                                    if ($query->num_rows > 0) {
-                                        $message = "A account with this email already exists. Please login <a href=\"login.php\">here</a>!";
-                                    } else {
-                                        $hashedPassword = hash("sha256", $pw);
-    
-                                        $query = $db->prepare('INSERT INTO users (mail,vname,nname,geschlecht,passwort,adresse,stadt,plz,isAdmin)
-                                        VALUES (?,?,?,?,?,?,?,?,0)');
-                                        $query->bind_param('ssssssss', $email,$vorname,$nachname,$geschlecht,$hashedPassword,$adress,$city,$plz);
-                                        $query->execute();
-                                        $messageErfolg = "Account successfully registerd. Please login <a href=\"login.php\">here</a>!";
-                                    }
+                                $geschlecht_array = array("m","f","d");
+                                if(!in_array($geschlecht,$geschlecht_array)) {
+                                    $message = "Please choose Male, Female or Divers";
                                 } else {
-                                    echo 'The Website is currently under maintenance';
+                                    if(preg_match("/^[A-Za-z][A-Za-z0-9]{3,20}$/",$username) == false) {
+                                        $message = "Your Username did not meet the requirements";
+                                    } else {
+                                        define('SECURE', true);
+                                        require_once('inc/connect.php');
+            
+                                        if($query = $db->prepare('SELECT id, mail from users WHERE mail = ?;')) {
+                                            $query->bind_param('s', $email);
+                                            $query->execute();
+                                            $query->store_result();
+                                            
+                                            if ($query->num_rows > 0) {
+                                                $message = "A account with this email already exists. Please login <a href=\"login.php\">here</a>!";
+                                            } else {
+        
+                                                if($query = $db->prepare('SELECT id, username from users WHERE username = ?;')) {
+                                                    $query->bind_param('s', $username);
+                                                    $query->execute();
+                                                    $query->store_result();
+        
+                                                    if ($query->num_rows > 0) {
+                                                        $message = "A account with this username already exists. Please login <a href=\"login.php\">here</a>!";
+        
+                                                    } else {
+        
+                                                        $hashedPassword = hash("sha256", $pw);
+                                                        $query = $db->prepare('INSERT INTO users (mail,vname,nname,geschlecht,passwort,adresse,stadt,plz,isAdmin,username)
+                                                        VALUES (?,?,?,?,?,?,?,?,0,?)');
+                                                        $query->bind_param('sssssssss', $email,$vorname,$nachname,$geschlecht,$hashedPassword,$adress,$city,$plz,$username);
+                                                        $query->execute();
+                                                        $messageErfolg = "Account successfully registerd. Please login <a href=\"login.php\">here</a>!";
+                                                        
+                                                    }
+        
+                                                } else {
+                                                    echo 'The Website is currently under maintenance';
+                                                    exit();
+                                                }
+        
+                                            }
+                                        } else {
+                                            echo 'The Website is currently under maintenance';
+                                            exit();
+                                        }
+                                    }
+                                    
                                 }
+                               
+    
+    
                             }
-                           
-
-
                         }
-                    }
-              }
+                  }
+            }
+
         }
 }
 
@@ -140,9 +170,13 @@ if(isset($_POST['register'])) {
                     <option value="d">Divers</option>
                 </select>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" id="inputEmail4" required>
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmailUserName" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" id="inputEmailUserName" required>
             </div>
             <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Password</label>

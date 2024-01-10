@@ -39,6 +39,7 @@ if(isset($_GET['userID'])) {
     $stadt = $user['stadt'];
     $plz = $user['plz'];
     $isAdmin = $user['isAdmin'];
+    $isActive = $user['isActive'];
 
 }
 
@@ -275,6 +276,33 @@ if(isset($_POST['update_isAdmin']) && (isset($_POST['isAdminField']))) {
     
 }
 
+
+if(isset($_POST['update_isActive']) && (isset($_POST['isActiveField']))) {
+
+    $new_isActive = trim(htmlspecialchars($_POST['isActiveField']));
+
+        //0 is considered empty!
+
+        if($isAdmin != 1 && $isAdmin != 0) {
+            $message = "isActive can only be 0 (is not active) or 1 (is active)";
+            $checkIfError = FALSE;
+        } else {
+            if($isActive == $new_isActive) {
+                $message = "You did not change isActive";
+                $checkIfError = FALSE;
+            } else {
+                    $query = $db->prepare("UPDATE users SET isActive=? WHERE id=?");
+                    $query->bind_param('ii',$new_isActive,$id);
+                    $query->execute();
+                    $message = "isActive is updated";
+                    $checkIfError = TRUE;
+                    $isActive = $new_isActive;
+            }
+        }
+
+    
+}
+
 ?>
 
 
@@ -343,7 +371,7 @@ if(isset($_POST['update_isAdmin']) && (isset($_POST['isAdminField']))) {
                 <td><?php echo $user['stadt']; ?></td>
                 <td><?php echo $user['plz']; ?></td>
                 <td><?php echo $user['isAdmin'] == '1' ? '✔️' : '❌'; ?></td>
-                <td>x</td>
+                <td><?php echo $user['isActive']; ?></td>
                 <td><a href="users.php?userID=<?php echo $user['id']?>">Bearbeiten</a></td>
                 </td>
 
@@ -555,6 +583,30 @@ if(isset($_POST['update_isAdmin']) && (isset($_POST['isAdminField']))) {
             <br>
         </div>
 
+
+        <div class="row profileelem">
+            <div class="col-4"><span>isActive</span></div>
+            <div class="col-4"><span><?php echo $isActive;?></span></div>
+            <div class="col-4" onclick="edit(7);"><span class="bearbeiten">Bearbeiten</span></div>
+            <hr>
+        </div>
+
+        <div class="row editdata block">
+            <br>
+            <form action="users.php?userID=<?php echo $id;?>" method="post" class="row">
+                <div class="col-auto">
+                    <label for="isActiveField" class="form-label">isActive</label>
+                </div>
+                <div class="col-3">
+                    <input type="text" name="isActiveField" class="form-control" value="<?php echo $isActive;?>"
+                        id="isActiveField">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" name="update_isActive" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <br>
+        </div>
     </div>
     <?php endif ?>
 

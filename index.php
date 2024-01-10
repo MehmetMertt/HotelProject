@@ -33,7 +33,7 @@
             </div>
 
             <div class="bookdiv col-xs-12 text-center">
-                <a class="booknow" href="#">BOOK NOW</a>
+                <a class="booknow" href="dashboard.php">BOOK NOW</a>
             </div>
 
             <div class="scroll">

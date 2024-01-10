@@ -26,22 +26,27 @@ if(isset($_POST['send']))
     if(filter_var($user_email, FILTER_VALIDATE_EMAIL) && !empty($user_password))
     {
         
-        $query = $db->prepare('SELECT `id`,`vname`,`nname`,`passwort`,`isAdmin` FROM `users` WHERE mail = ?');
+        $query = $db->prepare('SELECT `id`,`vname`,`nname`,`passwort`,`isAdmin`,`isActive` FROM `users` WHERE mail = ?');
         $query->bind_param('s', $user_email);
         $query->execute();
         $query->store_result();
-        $query->bind_result($id, $vorname, $nachname,$dbpassword,$isAdmin);
+        $query->bind_result($id, $vorname, $nachname,$dbpassword,$isAdmin,$isActive);
         $query->fetch();
         $hashed_user_password = hash("sha256",$user_password);
         if($hashed_user_password == $dbpassword) {
             if($query->num_rows == 1)
             {
-                $_SESSION['id'] = $id;
-                $_SESSION['isAdmin'] = $isAdmin;
-                $_SESSION['vorname'] = $vorname; 
-                $_SESSION['nachname'] = $nachname;
-                header('location: dashboard.php');
-                exit();
+                if((int)$isActive == 1) {
+                    $_SESSION['id'] = $id;
+                    $_SESSION['isAdmin'] = $isAdmin;
+                    $_SESSION['vorname'] = $vorname; 
+                    $_SESSION['nachname'] = $nachname;
+                    header('location: dashboard.php');
+                    exit();
+                } else {
+                    $error = "Ihr Account wurde von einem Administrator deaktiviert. Melden Sie sich per E-Mail!";
+                }
+
             }
             else
             {

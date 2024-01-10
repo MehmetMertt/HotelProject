@@ -43,7 +43,7 @@ if(isset($_SESSION['id'])) {
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">News-Beitrage erstellen</a></li>
                         <li><a class="dropdown-item" href="users.php">User-Bearbeiten</a></li>
-
+                        <li><a class="dropdown-item" href="allereservierungen.php">Alle Reservierungen</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

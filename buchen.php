@@ -42,7 +42,7 @@ if(isset($_POST['book'])) {
     $pets = trim(htmlspecialchars($_POST['pets']));
     $park = trim(htmlspecialchars($_POST['park']));
     $break = trim(htmlspecialchars($_POST['break']));
-
+    $voucher = 0;
     $query = $db->prepare('SELECT `preisProTag` from `zimmer` WHERE `zimmerId` = ?');
     $query->bind_param('i',$id);
     $query->execute();
@@ -283,18 +283,14 @@ $step = 1
 
                                 </tr>
                                 <tr>
-                                    <th class="small text-muted pr-2" scope="row">Subtotal</th>
-                                    <td id="subtotal" style="float: right"></td>
-                                </tr>
-                                <tr>
-                                    <th class="small text-muted pr-2" scope="row">Voucher</th>
-                                    <td style="float: right"> -0 EUR</td>
+                                    <th class="small text-muted pr-2" scope="row">Price/Tag</th>
+                                    <td id="priceperday" style="float: right"><?php echo $preisProTag . " EUR"; ?></td>
                                 </tr>
                                 <tr>
                                     <th class="small text-muted pr-2" scope="row"><b>Total</b></th>
                                     <input type="hidden" id="preisProTag" name="preisProTag"
                                         value="<?php echo $preisProTag; ?>" />
-                                    <td style="float: right"><b>1025 EUR</b>
+                                    <td id="totalprice" style="float: right"><b></b>
                                     </td>
                                 </tr>
                             </table>
@@ -303,6 +299,7 @@ $step = 1
                         </div>
                     </div>
                 </div>
+            </div>
         </form>
 
 
@@ -348,7 +345,7 @@ $step = 1
 
         var preis = anzahlDerNaechte * parseInt(document.getElementById('preisProTag').value);
 
-        document.getElementById('subtotal').innerHTML = preis.toString() + " EUR";
+        document.getElementById('totalprice').innerHTML = preis.toString() + " EUR";
     }
 
     var step = 1;
