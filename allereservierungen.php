@@ -46,26 +46,21 @@ if(isset($_GET['booking'])) {
     }
 }
 
+$query = $db->prepare('SELECT kategorie from zimmer WHERE zimmerid = ?;');
+$query->bind_param('i', $id);
+$query->execute();
+$query->bind_result($kategorie2);
+$query->fetch();  
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    <title>Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+<?php include 'inc/head.php'; ?>
 
-    <link rel="stylesheet" href="style/style.css" type="text/css" />
-    <title>Continental</title>
-</head>
 
 <body>
 
@@ -125,7 +120,7 @@ if(isset($_GET['booking'])) {
                 </div>
             </div>
             <div class="col-md-3 col-sm-6">
-                <p>Room Type: Luxuszimmer</p>
+                <p>Room Type: <?php include 'inc/kategorieparser.php'; ?></p>
                 <p>Room Number: Room <?php echo $id; ?></p>
                 <input type="hidden" name="zimmerID" value="<?php echo $id; ?>" />
                 <p>Frühstück:
@@ -173,8 +168,8 @@ if(isset($_GET['booking'])) {
                 </div>
             </div>
         </div>
-        <?php endif; ?>
     </div>
+    <?php endif; ?>
 
     <?php
     include 'inc/footer.php';

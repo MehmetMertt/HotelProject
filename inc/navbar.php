@@ -32,7 +32,9 @@ if(isset($_SESSION['id'])) {
                     <a class="nav-link" href="register.php">Register</a>
                 </li>
                 <?php endif; ?>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="news.php">News</a>
+                </li>
                 <?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1) : ?>
 
                 <li class="nav-item dropdown">
@@ -41,7 +43,7 @@ if(isset($_SESSION['id'])) {
                         Admin-Menü
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">News-Beitrage erstellen</a></li>
+                        <li><a class="dropdown-item" href="createnews.php">News-Beitrage erstellen</a></li>
                         <li><a class="dropdown-item" href="users.php">User-Bearbeiten</a></li>
                         <li><a class="dropdown-item" href="allereservierungen.php">Alle Reservierungen</a></li>
                         <li>

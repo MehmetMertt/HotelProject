@@ -47,47 +47,54 @@ if(isset($_POST['register'])) {
                                     if(preg_match("/^[A-Za-z][A-Za-z0-9]{3,20}$/",$username) == false) {
                                         $message = "Your Username did not meet the requirements";
                                     } else {
-                                        define('SECURE', true);
-                                        require_once('inc/connect.php');
-            
-                                        if($query = $db->prepare('SELECT id, mail from users WHERE mail = ?;')) {
-                                            $query->bind_param('s', $email);
-                                            $query->execute();
-                                            $query->store_result();
-                                            
-                                            if ($query->num_rows > 0) {
-                                                $message = "A account with this email already exists. Please login <a href=\"login.php\">here</a>!";
-                                            } else {
-        
-                                                if($query = $db->prepare('SELECT id, username from users WHERE username = ?;')) {
-                                                    $query->bind_param('s', $username);
-                                                    $query->execute();
-                                                    $query->store_result();
-        
-                                                    if ($query->num_rows > 0) {
-                                                        $message = "A account with this username already exists. Please login <a href=\"login.php\">here</a>!";
-        
-                                                    } else {
-        
-                                                        $hashedPassword = hash("sha256", $pw);
-                                                        $query = $db->prepare('INSERT INTO users (mail,vname,nname,geschlecht,passwort,adresse,stadt,plz,isAdmin,username)
-                                                        VALUES (?,?,?,?,?,?,?,?,0,?)');
-                                                        $query->bind_param('sssssssss', $email,$vorname,$nachname,$geschlecht,$hashedPassword,$adress,$city,$plz,$username);
-                                                        $query->execute();
-                                                        $messageErfolg = "Account successfully registerd. Please login <a href=\"login.php\">here</a>!";
-                                                        
-                                                    }
-        
-                                                } else {
-                                                    echo 'The Website is currently under maintenance';
-                                                    exit();
-                                                }
-        
-                                            }
+                                        preg_match('/(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"\'<>,.\/?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/', $pw, $pw_array);
+                                        if(empty($pw_array)) {
+                                        $message = "Your Password did not meet the requirements";
+
                                         } else {
-                                            echo 'The Website is currently under maintenance';
-                                            exit();
+                                            define('SECURE', true);
+                                            require_once('inc/connect.php');
+                
+                                            if($query = $db->prepare('SELECT id, mail from users WHERE mail = ?;')) {
+                                                $query->bind_param('s', $email);
+                                                $query->execute();
+                                                $query->store_result();
+                                                
+                                                if ($query->num_rows > 0) {
+                                                    $message = "A account with this email already exists. Please login <a href=\"login.php\">here</a>!";
+                                                } else {
+            
+                                                    if($query = $db->prepare('SELECT id, username from users WHERE username = ?;')) {
+                                                        $query->bind_param('s', $username);
+                                                        $query->execute();
+                                                        $query->store_result();
+            
+                                                        if ($query->num_rows > 0) {
+                                                            $message = "A account with this username already exists. Please login <a href=\"login.php\">here</a>!";
+            
+                                                        } else {
+            
+                                                            $hashedPassword = hash("sha256", $pw);
+                                                            $query = $db->prepare('INSERT INTO users (mail,vname,nname,geschlecht,passwort,adresse,stadt,plz,isAdmin,username)
+                                                            VALUES (?,?,?,?,?,?,?,?,0,?)');
+                                                            $query->bind_param('sssssssss', $email,$vorname,$nachname,$geschlecht,$hashedPassword,$adress,$city,$plz,$username);
+                                                            $query->execute();
+                                                            $messageErfolg = "Account successfully registerd. Please login <a href=\"login.php\">here</a>!";
+                                                            
+                                                        }
+            
+                                                    } else {
+                                                        echo 'The Website is currently under maintenance';
+                                                        exit();
+                                                    }
+            
+                                                }
+                                            } else {
+                                                echo 'The Website is currently under maintenance';
+                                                exit();
+                                            }
                                         }
+                                        
                                     }
                                     
                                 }
@@ -110,18 +117,10 @@ if(isset($_POST['register'])) {
 
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="style/style.css" type="text/css" />
-    <title>Register</title>
-</head>
+<?php include 'inc/head.php'; ?>
+
 
 <body>
 
@@ -155,11 +154,11 @@ if(isset($_POST['register'])) {
         <form action="register.php" method="post" class="row align-items-center">
             <div class="col-md-4">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" name="vorname" class="form-control" id="name" required>
+                <input onkeyup="checkName();" type="text" name="vorname" class="form-control" id="name" required />
             </div>
             <div class="col-md-4">
                 <label for="surname" class="form-label">Surname</label>
-                <input type="text" name="nachname" class="form-control" id="surname" required>
+                <input onkeyup="checkName();" type="text" name="nachname" class="form-control" id="surname" required />
             </div>
             <div class="col-md-4">
                 <label for="inputState" class="form-label">Sex</label>
@@ -172,36 +171,41 @@ if(isset($_POST['register'])) {
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" id="inputEmail4" required>
+                <input type="email" name="email" class="form-control" id="inputEmail4" required />
             </div>
             <div class="col-md-6">
                 <label for="inputEmailUserName" class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" id="inputEmailUserName" required>
+                <input onkeyup="checkusername();" type="text" name="username" class="form-control"
+                    id="inputEmailUserName" required>
             </div>
             <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" name="pw" class="form-control" id="inputPassword4" required>
+                <input type="password" name="pw" class="form-control" id="inputPassword4" required />
             </div>
             <div class="col-md-6">
                 <label for="inputPassword5" class="form-label">Password wiederholen</label>
-                <input type="password" name="pw2" class="form-control" id="inputPassword5" required>
-            </div>
-            <div class="col-6">
-                <label for="inputAddress" class="form-label">Address</label>
-                <input type="text" name="adress" class="form-control" id="inputAddress" placeholder="Ringstraße 01"
+                <input onkeyup="checkpw();" type="password" name="pw2" class="form-control" id="inputPassword5"
                     required>
+            </div>
+            <br>
+            <div id="pwhelp" class="form-text">Your password must be atleast 8 characters long and should contain
+                1 upper- and lowercase letter, 1 number and 1 special character.</div>
+            <div class="col-md-4">
+                <label for="inputAddress" class="form-label">Address</label>
+                <input type="text" onkeyup="checkpw();" name=" adress" class="form-control" id="inputAddress"
+                    placeholder="Ringstraße 01" required />
             </div>
             <div class="col-md-4">
                 <label for="inputCity" class="form-label">City</label>
-                <input type="text" name="city" class="form-control" id="inputCity" required>
+                <input type="text" name="city" class="form-control" id="inputCity" required />
             </div>
             <div class="col-md-2">
                 <label for="inputZip" class="form-label">Postal Code</label>
-                <input type="text" name="plz" class="form-control" id="inputZip" name="inputZip" required>
+                <input type="text" name="plz" class="form-control" id="inputZip" name="inputZip" required />
             </div>
             <div class="col-12">
                 <div class="form-check">
-                    <input class="form-check-input" name="nutz" type="checkbox" id="gridCheck" required>
+                    <input class="form-check-input" name="nutz" type="checkbox" id="gridCheck" required />
                     <label class="form-check-label" for="gridCheck">Indem Sie auf „Registrieren” klicken, erklärst Sie
                         sich mit
                         unseren Nutzungsbedingungen einverstanden und bestätigst, dass du
@@ -210,10 +214,78 @@ if(isset($_POST['register'])) {
                 </div>
             </div>
             <div class="col-12">
-                <button type="submit" name="register" class=" btn btn-primary">Register</button>
+                <button id="registerbutton" type="submit" name="register" class=" btn btn-primary"
+                    disabled>Register</button>
             </div>
         </form>
     </div>
+
+
+    <script>
+    function checkpw() {
+        var pass = document.getElementById('inputPassword4');
+        var passre = document.getElementById('inputPassword5');
+
+        if (pass.value.length < 8) {
+            var messsage = "Your Password must be minimum 8 characters long!"
+            document.getElementById('registerbutton').disabled = true;
+
+        } else {
+            if (pass.value != passre.value) {
+                var message = "Your Passwords does not match!"
+                document.getElementById('registerbutton').disabled = true;
+
+            } else {
+                const regex =
+                    /(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/gm; //https://www.regextester.com/104028
+                const found = pass.value.match(regex);
+                if (found == null) {
+                    var message =
+                        "Your Password should has atleast 1 lowercase, 1 upercase Leter, 1 number, 1 special character!"
+                    document.getElementById('registerbutton').disabled = true;
+
+                } else {
+                    document.getElementById('registerbutton').disabled = false;
+                }
+            }
+        }
+    }
+
+    function checkName() {
+        var vor = document.getElementById('name');
+        var nach = document.getElementById('surname');
+
+        const nameregex = /^[a-zA-Z\s]+$/;
+        const foundregex = vor.value.match(nameregex);
+        const foundregex2 = nach.value.match(nameregex);
+        if (foundregex == null || foundregex2 == null) {
+            var message =
+                "Please use a real username!"
+            document.getElementById('registerbutton').disabled = true;
+
+        } else {
+            if (foundregex != null && foundregex2 != null) {
+                document.getElementById('registerbutton').disabled = false;
+            }
+        }
+
+    }
+
+    function checkusername() {
+        var username = document.getElementById('inputEmailUserName');
+        const regexus = /[A-Za-z][A-Za-z0-9]{3,20}/;
+        const foundus = username.value.match(regexus);
+        if (foundus == null) {
+            var message =
+                "You username should be between 3 and 20 characters long. Only Letters and Numbers are allowed!"
+            document.getElementById('registerbutton').disabled = true;
+
+        } else {
+            document.getElementById('registerbutton').disabled = false;
+        }
+    }
+    </script>
+
 
     <?php
     include 'inc/footer.php'

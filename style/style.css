@@ -48,8 +48,6 @@ body {
 }
 
 .body {
-  font-family: Arial, sans-serif;
-  background-color: #f3f3f3;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -63,7 +61,6 @@ body {
 }
 
 .login-form {
-  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -351,6 +348,11 @@ footer {
   }
 }
 
+/* CSS vererbt irgendwo her eine andere größe für a tags*/
+a {
+  font-size: 1rem;
+}
+
 /*  MANAGE */
 
 .bodyhelp {
@@ -366,6 +368,10 @@ footer {
 .infos {
   margin: 50px;
   margin-bottom: 5px;
+}
+
+#pwhelp {
+  margin: 5px;
 }
 
 #picedit {
@@ -427,10 +433,6 @@ footer {
   font-size: 1rem;
 }
 
-h1 {
-  font-size: 1rem;
-}
-
 .date {
   max-width: 600px;
 }
@@ -487,7 +489,12 @@ h1 {
   margin: auto;
 }
 
+.news h1 h2 {
+  font-size: 1rem;
+}
+
 .news {
+  position: relative;
   width: 256px;
   padding-bottom: 10px;
   padding-left: 0px;
@@ -512,6 +519,9 @@ h1 {
 .gotonews {
   float: right;
   margin: 5px;
+  bottom: 0;
+  right: 0;
+  position: absolute;
 }
 
 .read {
@@ -532,4 +542,8 @@ h1 {
   max-height: 500px;
   max-width: auto;
   margin: 20px;
+}
+
+.bookdash {
+  float: right;
 }

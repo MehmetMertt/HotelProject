@@ -1,10 +1,6 @@
 <?php
 
 session_start();
-if(isset($_SESSION['id']) == FALSE) {
-    header('location: login.php');
-    exit();
-}
 
 define('SECURE', true);
 require_once('inc/connect.php');
@@ -12,9 +8,8 @@ require_once('inc/connect.php');
 
 
 if(!isset($_GET['read'])) {
-    $id = $_SESSION['id'];
 
-    $query = $db->prepare('SELECT LEFT(body, 100) AS textview, news_id, title, `image`, `date`, author_id FROM news
+    $query = $db->prepare('SELECT LEFT(body, 100) AS textview, news_id, title, `image`, UNIX_TIMESTAMP(`date`), author_id FROM news
     order by `date` desc;');
     $query->execute();
     $allenewsartikel = $query->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -27,14 +22,14 @@ if(!isset($_GET['read'])) {
 } else {
     $read_id = trim(htmlspecialchars($_GET['read']));
 
-    $query = $db->prepare('SELECT body,news_id, title, `image`, `date`, users.vname  FROM news
+    $query = $db->prepare('SELECT body,news_id, title, `image`, UNIX_TIMESTAMP(`date`), users.vname  FROM news
     left join users on news.author_id = users.id 
     where news_id = ?;');
     $query->bind_param('i', $read_id);
     $query->execute();
     $query->store_result();
 
-    if($query->num_rows >= 0) {
+    if($query->num_rows > 0) {
         $query->bind_result($text, $newsid, $title,$bild,$datum,$author);
 
         $query->fetch();
@@ -54,20 +49,8 @@ if(!isset($_GET['read'])) {
 <html lang="en">
 
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    <title>Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+<?php include 'inc/head.php'; ?>
 
-    <link rel="stylesheet" href="style/style.css" type="text/css" />
-    <title>Continental</title>
-</head>
 
 <body>
 
@@ -75,17 +58,41 @@ if(!isset($_GET['read'])) {
     include 'inc/navbar.php'
     ?>
 
+
+    <?php if(isset($message)): ?>
+    <div class="container">
+        <div class="alert alert-danger alert-dismissible fade show">
+            <strong>Error!</strong> <?php echo $message; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php if(isset($messageErfolg)): ?>
+    <div class="container">
+        <div class="alert alert-success alert-dismissible fade show">
+            <strong>Error!</strong> <?php echo $messageErfolg; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+    <?php endif; ?>
+
+
     <div class="container">
         <div class="row">
             <?php if(!isset($message) && !isset($_GET['read'])) :?>
             <?php foreach ($allenewsartikel as $news) : ?>
+            <?php
+                $newsview = $news['textview'];
+                $newsview = preg_replace('/&[^;]+;/', '', $newsview);
+                $newsview = preg_replace('/<h1(.*?)<\/h1>/', '', $newsview);
+            ?>
             <div class="news col-3">
                 <img src="<?php echo $news['image']; ?>" alt="News Titelbild">
                 <h3><?php echo $news['title']; ?></h3>
-                <p class="newsdatum"><?php echo $news['date']; ?></p><br>
-                <p class="newsinhalt"><?php echo $news['textview'] . "..."; ?> </p>
+                <span class="newsdatum"><?php echo date('d.m.Y H:i',$news['UNIX_TIMESTAMP(`date`)']); ?></span><br>
+                <span class="newsinhalt"><?php echo $newsview . "..."; ?></span><br>
                 <a class="gotonews btn btn-primary" href="news.php?read=<?php echo $news['news_id'];?>" role="
-                    button">Read</a>
+                    button">Read</a><br>
             </div>
             <?php endforeach;?>
             <?php endif; ?>
@@ -97,10 +104,11 @@ if(!isset($_GET['read'])) {
     <div class="d-flex justify-content-center">
         <div class="read">
             <h2><?php echo $title; ?></h2>
-            <span class="date"><?php echo $datum; ?></span>
-            <span class="author">by <?php echo $author; ?></span>
-            <br>
-            <img class="img-fluid" src="<?php echo $bild; ?>" alt="titelbild" height="400" width="auto">
+            <span
+                class="date"><?php echo "Posted at <b>" . date('d.m.Y H:i', $datum) . "</b> by <b>" . $author . "</b>" ?></span>
+            <span class="author"></span><br>
+            <img src="<?php echo $bild; ?>" alt="titelbild">
+
             <p><?php echo $text; ?>
             </p>
         </div>

@@ -18,6 +18,8 @@ function validateDate($date, $format = 'd.m.Y')
 //https://www.php.net/manual/en/function.checkdate.php#113205
 
 
+
+
 $kostenparkplatz = 10;
 $kostenfruestueck = 7;
 
@@ -99,11 +101,11 @@ if(isset($_POST['booking'])) {
 
 
         //check ob daten manipuliert wurden
-        $query = $db->prepare('SELECT `preisProTag`, `maxPerson`, `maxHaustier` from `zimmer` WHERE `zimmerId` = ?');
+        $query = $db->prepare('SELECT `preisProTag`, `maxPerson`, `maxHaustier`, `kategorie` from `zimmer` WHERE `zimmerId` = ?');
         $query->bind_param('i',$id);
         $query->execute();
         $query->store_result();
-        $query->bind_result($preisProTag, $maxPerson, $maxHaustier);
+        $query->bind_result($preisProTag, $maxPerson, $maxHaustier,$kategorie2);
         $query->fetch();  
         
         $human = (int)$children + (int)$adults;
@@ -189,29 +191,19 @@ if(isset($_POST['booking'])) {
 }
 
    
-
-
-$step = 1
+$query = $db->prepare('SELECT kategorie from zimmer WHERE zimmerid = ?;');
+$query->bind_param('i', $id);
+$query->execute();
+$query->bind_result($kategorie2);
+$query->fetch();  
 
 ?>
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-    <title>Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
-    <link rel="stylesheet" href="style/style.css" type="text/css" />
-    <title>Continental</title>
-</head>
+<?php include 'inc/head.php'; ?>
+
 
 <body>
 
@@ -245,7 +237,7 @@ $step = 1
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
-                        <p>Room Type: Luxuszimmer</p>
+                        <p>Room Type: <?php include 'inc/kategorieparser.php';?></p>
                         <p>Room Number: Room <?php echo $id; ?></p>
                         <input type="hidden" name="zimmerID" value="<?php echo $id; ?>" />
                         <p>Frühstück:
