@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if(isset($_SESSION['id'])) {
     header("location: dashboard.php");
     exit();
@@ -45,7 +47,7 @@ if(isset($_POST['register'])) {
                                     $message = "Please choose Male, Female or Divers";
                                 } else {
                                     if(preg_match("/^[A-Za-z][A-Za-z0-9]{3,20}$/",$username) == false) {
-                                        $message = "Your Username did not meet the requirements";
+                                        $message = "Your Username must be between 3-20 characters and start with a letter";
                                     } else {
                                         preg_match('/(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"\'<>,.\/?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/', $pw, $pw_array);
                                         if(empty($pw_array)) {
@@ -133,22 +135,7 @@ if(isset($_POST['register'])) {
         <h1>Register</h1>
 
         <br>
-        <?php if(isset($message)): ?>
-        <div class="container">
-            <div class="alert alert-danger alert-dismissible fade show">
-                <strong>Error!</strong> <?php echo $message; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </div>
-        <?php endif; ?>
-        <?php if(isset($messageErfolg)): ?>
-        <div class="container">
-            <div class="alert alert-success alert-dismissible fade show">
-                <strong>Error!</strong> <?php echo $messageErfolg; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </div>
-        <?php endif; ?>
+        <?php include 'inc/errorhandler.php'; ?>
         <br>
 
         <form action="register.php" method="post" class="row align-items-center">
@@ -213,10 +200,26 @@ if(isset($_POST['register'])) {
                         Verwendung von Cookies gelesen hast.</label>
                 </div>
             </div>
+
+
+
             <div class="col-12">
-                <button id="registerbutton" type="submit" name="register" class=" btn btn-primary"
-                    disabled>Register</button>
+                <button id="registerbutton" type="submit" name="register" class="btn btn-primary position-relative"
+                    disabled>Register
+                </button>
             </div>
+
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+                <div id="toastNotice" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Error</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div id="toastbody" class="toast-body">
+                    </div>
+                </div>
+            </div>
+
         </form>
     </div>
 
@@ -249,6 +252,15 @@ if(isset($_POST['register'])) {
                 }
             }
         }
+        if (typeof message !== 'undefined') {
+            //https://stackoverflow.com/questions/63515279/how-to-initialize-toasts-with-javascript-in-bootstrap-5
+            document.getElementById("toastbody").innerHTML = message;
+            var myAlert = document.getElementById('toastNotice');
+            var bsAlert = new bootstrap.Toast(myAlert);
+            setTimeout(function() {
+                bsAlert.show();
+            }, 1000);
+        }
     }
 
     function checkName() {
@@ -260,13 +272,21 @@ if(isset($_POST['register'])) {
         const foundregex2 = nach.value.match(nameregex);
         if (foundregex == null || foundregex2 == null) {
             var message =
-                "Please use a real username!"
+                "Please use a real name!"
             document.getElementById('registerbutton').disabled = true;
 
         } else {
             if (foundregex != null && foundregex2 != null) {
                 document.getElementById('registerbutton').disabled = false;
             }
+        }
+        if (typeof message !== 'undefined') {
+            document.getElementById("toastbody").innerHTML = message;
+            var myAlert = document.getElementById('toastNotice');
+            var bsAlert = new bootstrap.Toast(myAlert);
+            setTimeout(function() {
+                bsAlert.show();
+            }, 1000);
         }
 
     }
@@ -277,11 +297,20 @@ if(isset($_POST['register'])) {
         const foundus = username.value.match(regexus);
         if (foundus == null) {
             var message =
-                "You username should be between 3 and 20 characters long. Only Letters and Numbers are allowed!"
+                "You username should be between 3 and 20 characters long. Only Letters and Numbers are allowed! First Character must be a letter"
             document.getElementById('registerbutton').disabled = true;
 
         } else {
             document.getElementById('registerbutton').disabled = false;
+        }
+        if (typeof message !== 'undefined') {
+            document.getElementById("toastbody").innerHTML = message;
+
+            var myAlert = document.getElementById('toastNotice');
+            var bsAlert = new bootstrap.Toast(myAlert);
+            setTimeout(function() {
+                bsAlert.show();
+            }, 1000);
         }
     }
     </script>

@@ -34,6 +34,7 @@ if(isset($_POST['getZimmer'])) {
     
     $kostenparkplatz = 10;
     $kostenfruestueck = 7;
+    $KostenTier = 2;
 
     if(!empty($kategorie) && !empty($adults) && !isset($message)) {
         
@@ -60,7 +61,7 @@ if(isset($_POST['getZimmer'])) {
         if(empty($allezimmer)) {
             $message = "Es wurden leider keine Zimmer gefunden!";
         } else {
-            if(isset($_POST['park']) || isset($_POST['breakfast']) ) {
+            if(isset($_POST['park']) || isset($_POST['breakfast'])|| $pets2 > 0 ) {
 
                 foreach ($allezimmer as $key => $room) {
                     if (isset($_POST['park'])) {
@@ -69,6 +70,10 @@ if(isset($_POST['getZimmer'])) {
     
                     if(isset($_POST['breakfast'])) {
                         $allezimmer[$key]['preisProTag'] = $allezimmer[$key]['preisProTag'] + $kostenfruestueck; // Update price to 150 for room 1
+                    }
+
+                    if($pets2 > 0) {
+                        $allezimmer[$key]['preisProTag'] = $allezimmer[$key]['preisProTag'] + $KostenTier;
                     }
                  }
     
@@ -93,69 +98,76 @@ $currentstep = 1
 
 <body>
 
-    <div class="main">
-        <?php
+    <?php
     include 'inc/navbar.php';
     ?>
+    <div class="container main">
 
 
-        <h1>Wohin als Nächstes, <?php echo $_SESSION['vorname']; ?>
+        <h1>Where to go next, <?php echo $_SESSION['vorname']; ?> </h1>
 
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <div class="auswahlcenter">
-                    <div class="row auswahl">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <div class="auswahlcenter">
+                <div class="row auswahl">
 
-                        <div class="d-flex col-lg-3 col-sm-12">
-                            <select value="test" name="zimmerart" type="text" class="form-control"
-                                class="form-select form-select-sm" aria-label="Small select example" required>
-                                <option value="1">Luxuszimmer</option>
-                                <option value="2">Doppelzimmer</option>
-                                <option value="3">Einzelzimmer</option>
-                                <option value="4">Dreierzimmer</option>
-                                <option value="5">Viererzimmer</option>
-                                <option value="6">Präsidentensuite</option>
+                    <div class="d-flex col-lg-3 col-sm-12">
+                        <select value="test" name="zimmerart" type="text" class="form-control"
+                            class="form-select form-select-sm" aria-label="Small select example" required>
+                            <option value="1">Luxuszimmer</option>
+                            <option value="2">Doppelzimmer</option>
+                            <option value="3">Einzelzimmer</option>
+                            <option value="4">Dreierzimmer</option>
+                            <option value="5">Viererzimmer</option>
+                            <option value="6">Präsidentensuite</option>
 
 
-                            </select>
-                        </div>
-                        <div class=" d-flex col-lg-3 col-sm-12">
-                            <input class="form-control dropdown-toggle" type="text" id="dropdownMenuClickable"
-                                placeholder="Mit wem reisen Sie?" data-bs-toggle="dropdown" data-bs-auto-close="false"
-                                onclick="removeDropdown2()">
-                            </input>
+                        </select>
+                    </div>
+                    <div class="d-flex col-lg-4 col-sm-12">
+                        <input class="form-control dropdown-toggle" type="text" id="mitwemreisen"
+                            placeholder="Who are you traveling with?" data-bs-toggle="dropdown"
+                            data-bs-auto-close="false" onclick="removeDropdown2()">
+                        </input>
 
-                            <div class="dropdown">
+                        <div class="dropdown">
 
-                                <div id="dropdown" class="dropdown-menu p-4">
-                                    <div class="mb-2">
-                                        <label for="exampleDropdownFormEmail2" class="form-label">Erwachsene</label>
-                                        <button type="button" onclick="decreaseValue('adult')" name='decqty'>-</button>
-                                        <input id="adult" type='text' size='1' name='adult' value='0' readonly />
-                                        <button type="button" onclick="increaseValue('adult')" name='incqty'>+</button>
+                            <div id="dropdown" class="dropdown-menu p-4">
+                                <div class="mb-2">
+                                    <label for="exampleDropdownFormEmail2" class="form-label">Adults</label>
+                                    <input class="btn btn-primary btn-sm" type="button"
+                                        onclick="decreaseValue('adult');changePlace();" name='decqty' value="-">
+                                    <input id="adult" type='text' size='1' name='adult' value='0' readonly />
+                                    <input class="btn btn-primary btn-sm" type="button"
+                                        onclick="increaseValue('adult');changePlace();" type="
+                                        button" value="+">
 
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="exampleDropdownFormPassword2" class="form-label">Kinder</label>
-                                        <button type="button" onclick="decreaseValue('child')" name='decqty'>-</button>
-                                        <input id="child" type='text' size='1' name='child' value='0' readonly />
-                                        <button type="button" onclick="increaseValue('child')" name='incqty'>+</button>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="exampleDropdownFormPassword2" class="form-label">Haustiere</label>
-                                        <button type="button" onclick="decreaseValue('pets')" name='decqty'>-</button>
-                                        <input id="pets" type='text' size='1' name='pets' value='0' readonly />
-                                        <button type="button" onclick="increaseValue('pets')" name='incqty'>+</button>
-
-                                    </div>
-
-                                    <button type="button" data-toggle="dropdown" onclick="removeDropdown()"
-                                        class="btn btn-primary">Fertig</button>
                                 </div>
+                                <div class="mb-2">
+                                    <label for="exampleDropdownFormPassword2" class="form-label">Children</label>
+                                    <input class="btn btn-primary btn-sm" type="button"
+                                        onclick="decreaseValue('child');changePlace();" name='decqty' value="-">
+                                    <input id="child" type='text' size='1' name='child' value='0' readonly />
+                                    <input class="btn btn-primary btn-sm" type="button"
+                                        onclick="increaseValue('child');changePlace();" value="+" name='incqty'>
+
+                                </div>
+                                <div class="mb-2">
+                                    <label for="exampleDropdownFormPassword2" class="form-label">Pets</label>
+                                    <input class="btn btn-primary btn-sm" type="button" value="-"
+                                        onclick="decreaseValue('pets');changePlace();" name='decqty'>
+                                    <input id="pets" type='text' size='1' name='pets' value='0' readonly />
+                                    <input type="button" class="btn btn-primary btn-sm" value="+"
+                                        onclick="increaseValue('pets');changePlace();" name='incqty'>
+
+                                </div>
+
+                                <button type="button" data-toggle="dropdown" onclick="removeDropdown()"
+                                    class="btn btn-primary">Done</button>
                             </div>
                         </div>
-                        <div class="d-flex col-lg-3 col-sm-12">
-                            <!-- 
+                    </div>
+                    <div class="d-flex col-lg-3 col-sm-12">
+                        <!-- 
                         <input style="font-size: 15px;" id="datepicker" class="form-control dropdown-toggle"
                             type="text" id="dropdownMenuClickable" name="datepicker" placeholder="Wann reisen Sie?"
                             data-bs-toggle="dropdown" data-bs-auto-close="false" />
@@ -163,141 +175,145 @@ $currentstep = 1
                         <input type="hidden" id="endDate">
                         --->
 
-                            <input class="form-control dropdown-toggle" type="text" id="dropdownMenuClickable"
-                                placeholder="Extras auswählen" data-bs-toggle="dropdown" data-bs-auto-close="false"
-                                onclick="removeDropdown()">
-                            </input>
+                        <input class="form-control dropdown-toggle" type="text" id="extrasauswahlen"
+                            placeholder="Extras auswählen" data-bs-toggle="dropdown" data-bs-auto-close="false"
+                            onclick="removeDropdown();">
+                        </input>
 
-                            <div class="dropdown">
+                        <div class="dropdown">
 
-                                <div id="dropdown2" class="dropdown-menu p-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="breakfast"
-                                            value="breakfast" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Mit Frühstück?
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="park" value="park"
-                                            id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Mit Parkplatz?
-                                        </label>
-                                    </div>
-
-                                    <button type="button" data-toggle="dropdown" onclick="removeDropdown2()"
-                                        class="btn btn-primary">Fertig</button>
+                            <div id="dropdown2" class="dropdown-menu p-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="breakfast" value="breakfast"
+                                        id="flexCheckDefault1" onclick="changeExtraPlace();">
+                                    <label class="form-check-label" for="flexCheckDefault1">
+                                        breakfast?
+                                    </label>
                                 </div>
-                            </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="park" value="park"
+                                        id="flexCheckDefault2" onclick="changeExtraPlace();">
+                                    <label class="form-check-label" for="flexCheckDefault2">
+                                        parking lot?
+                                    </label>
+                                </div>
 
+                                <button type="button" data-toggle="dropdown" onclick="removeDropdown2()"
+                                    class="btn btn-primary">Done</button>
+                            </div>
                         </div>
-                        <div class="d-flex col-lg-3 col-sm-12">
-                            <button style="width: 100%;" class="btn btn-primary btn-lg" type="getZimmer" id="getZimmer"
-                                name="getZimmer">Suchen</button>
-                        </div>
+
+                    </div>
+                    <div class="d-flex col-lg-2 col-sm-12">
+                        <button class="btn btn-primary btn-lg buttonform" type="getZimmer" id="getZimmer"
+                            name="getZimmer">Search</button>
                     </div>
                 </div>
-            </form>
-
-            <?php if(isset($_POST['getZimmer']) && !isset($message)) : ?>
-
-
-            <?php foreach ($allezimmer as $zimmer) : ?>
-            <form action="buchen.php" method="post">
-                <input type="hidden" name="zimmerID" value="<?php echo $zimmer['zimmerid'] ?>" />
-                <input type="hidden" name="er" value="<?php echo $adults?>" />
-                <input type="hidden" name="ch" value="<?php echo $children ?>" />
-                <input type="hidden" name="pets" value="<?php echo $pets ?>" />
-                <input type="hidden" name="park" value="<?php echo $park ?>" />
-                <input type="hidden" name="break" value="<?php echo $break ?>" />
-                <div class="zimmer">
-                    <img alt="zimmer" height="183px" width="275px" src="<?php echo $zimmer['bildpfad'] ?>">
-                    <h2><?php include 'inc/kategorieparser.php'; ?></h2>
-                    <h3><?php echo $zimmer['preisProTag'] .'€' ?></h3>
-                    <p><?php echo $zimmer['beschreibung'] ?>
-                    </p>
-                    <a href="<?php echo "zimmerdetails.php?id=" . $zimmer['zimmerid'] ?>"> Mehr Informationen</a>
-                    <button type="submit" name="book" class="bookdash btn btn-primary">Buchen</button></a>
-                </div>
-            </form>
-            <?php endforeach; ?>
-            <?php endif; ?>
-
-
-            <?php if(isset($message)): ?>
-            <br>
-            <div class="container">
-                <div class="alert alert-danger alert-dismissible fade show">
-                    <strong>Error!</strong> <?php echo $message; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
             </div>
-            <?php endif; ?>
+        </form>
+
+        <?php if(isset($_POST['getZimmer']) && !isset($message)) : ?>
 
 
-            <div class=" angebote">
-                <h1>Angebote</h1>
-                <!--
-        <p>Rabatte, Werbeaktionen und Sonderangebote für Sie</p>
-        <div class="card-angebot">
-            <h1>Machen Sie ihren bisher längsten Urlaub</h1>
-            <p>Durchstöbern Sie Unterkünfte mit Langzeitaufenthalten -
-                viele zu reduzierten Monatspreisen.</p>
-                <img width="250px" src="img/family_laptop.jpg">
-                
+        <?php foreach ($allezimmer as $zimmer) : ?>
+        <form action="buchen.php" method="post">
+            <input type="hidden" name="zimmerID" value="<?php echo $zimmer['zimmerid'] ?>" />
+            <input type="hidden" name="er" value="<?php echo $adults?>" />
+            <input type="hidden" name="ch" value="<?php echo $children ?>" />
+            <input type="hidden" name="pets" value="<?php echo $pets ?>" />
+            <input type="hidden" name="park" value="<?php echo $park ?>" />
+            <input type="hidden" name="break" value="<?php echo $break ?>" />
+            <div class="zimmer">
+                <img alt="zimmer" src="<?php echo $zimmer['bildpfad'] ?>">
+                <h2><?php include 'inc/kategorieparser.php'; ?></h2>
+                <p><?php echo $zimmer['beschreibung'] ?>
+                </p>
+                <h4><?php echo $zimmer['preisProTag'] .'€/night' ?></h4>
+                <a target="_blank" href="<?php echo "zimmerinformation.php?id=" . $zimmer['zimmerid'] ?>">More
+                    Informations</a>
+
+                <button type="submit" name="book" class="bookdash btn btn-primary">Book</button></a>
             </div>
-            --->
-            </div>
+        </form>
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+
+        <?php include 'inc/errorhandler.php'; ?>
 
 
 
 
 
+        <script>
+        function changeExtraPlace() {
+            var parkk = document.getElementById('flexCheckDefault1').checked;
+            var breakk = document.getElementById('flexCheckDefault2').checked;
 
-            <script>
-            function removeDropdown() {
-                document.getElementById('dropdown').classList.remove('show');
+            if (!parkk && !breakk) {
+                document.getElementById('extrasauswahlen').placeholder = "Any Extras?"
+            } else {
+                document.getElementById('extrasauswahlen').placeholder =
+                    `Park: ${parkk} | Breakfast: ${breakk}`;
             }
+        }
 
-            function removeDropdown2() {
-                document.getElementById('dropdown2').classList.remove('show');
-            }
+        function removeDropdown() {
+            document.getElementById('dropdown').classList.remove('show');
+        };
 
-            function increaseValue(eleId) {
-                var maxPets = 2;
-                var value = parseInt(document.getElementById(eleId).value, 10);
-                value = isNaN(value) ? 0 : value;
+        function removeDropdown2() {
+            document.getElementById('dropdown2').classList.remove('show');
+        };
 
-                if (eleId === 'pets') {
-                    if (value < maxPets) {
-                        value++
-                    }
-                } else {
+        function increaseValue(eleId) {
+            var maxPets = 2;
+            var value = parseInt(document.getElementById(eleId).value);
+            value = isNaN(value) ? 0 : value;
+
+            if (eleId === 'pets') {
+                if (value < maxPets) {
                     value++
+                    document.getElementById(eleId).value = value;
                 }
-
+            } else {
+                value++
 
                 document.getElementById(eleId).value = value;
 
-
-
             }
 
-            function decreaseValue(eleId) {
-                var value = parseInt(document.getElementById(eleId).value, 10);
-                value = isNaN(value) ? 0 : value;
-                value--;
-                if (value < 0) {
-                    document.getElementById(eleId).value = 0;
-                } else {
-                    document.getElementById(eleId).value = value;
+        };
 
-                }
+        function decreaseValue(eleId) {
+            var value = parseInt(document.getElementById(eleId).value, 10);
+            value = isNaN(value) ? 0 : value;
+            value--;
+            if (value < 0) {
+                document.getElementById(eleId).value = 0;
+            } else {
+                document.getElementById(eleId).value = value;
+
             }
-            </script>
+        };
 
-            <script type="text/javascript" src="js/picker.js"></script>
+        function changePlace() {
+            var pets = document.getElementById('pets').value;
+            var adults = document.getElementById('adult').value;
+            var children = document.getElementById('child').value;
+
+            if (pets == 0 && adults == 0 && children == 0) {
+                document.getElementById('mitwemreisen').placeholder = "Who are you traveling with?"
+            } else {
+                document.getElementById('mitwemreisen').placeholder =
+                    `Adults: ${adults} | Kids: ${children} | Pets: ${pets}`;
+            }
+
+        };
+        </script>
+
+
+        <script type="text/javascript" src="js/picker.js"></script>
 
 
     </div>

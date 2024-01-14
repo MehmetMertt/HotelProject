@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +15,7 @@
     ?>
 
 
-    <div class="back">
+    <div class="container">
         <h1 class="margin">Impressum The Continental</h1>
         <section>
             <ul style="list-style-type: none">
@@ -61,16 +65,15 @@
 
             <figure class="figure">
                 <img src="img\flo.png" alt="Mehmet Mert" height="200px" width="auto">
-                <figcaption class="figure-caption">florian Korcian</figcaption>
+                <figcaption class="figure-caption">Florian Korcian</figcaption>
             </figure>
 
         </div>
 
-
-        <?php
+    </div>
+    <?php
      include 'inc/footer.php' 
      ?>
-
 </body>
 
 </html>

@@ -34,6 +34,9 @@ body {
   display: block;
 }
 
+.steps {
+  margin-bottom: 25px;
+}
 .overlay {
   bottom: 0;
   width: 100%;
@@ -125,6 +128,10 @@ body {
   width: 100%;
   z-index: 1;
   background-color: white;
+}
+
+.main {
+  margin-bottom: 25px;
 }
 
 .titlemain {
@@ -330,9 +337,11 @@ footer {
 
 .auswahlcenter {
   padding-top: 25px;
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
+  margin: auto;
+  width: 70%;
 }
 
 .auswahl > * {
@@ -355,14 +364,6 @@ a {
 
 /*  MANAGE */
 
-.bodyhelp {
-  background-color: #f3f3f3;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
 /* PROFILE */
 
 .infos {
@@ -383,11 +384,6 @@ a {
 }
 
 /* END PROFILE */
-
-.back {
-  font-family: Arial, sans-serif;
-  background-color: #f3f3f3;
-}
 
 .container-impressum {
   display: flex;
@@ -415,8 +411,8 @@ a {
   margin-top: 10px;
   border: 1px solid #ccc;
   border-radius: 16px;
-  width: 50%;
-  min-width: 800px;
+  width: 800px;
+  min-width: min-content;
   align-items: center;
 }
 
@@ -427,6 +423,12 @@ a {
 
 .zimmer img {
   border-radius: 16px;
+  height: 183px;
+  width: 275px;
+}
+
+.allezimmer {
+  margin-bottom: 25px;
 }
 
 .zimmer p {
@@ -443,19 +445,23 @@ a {
   padding: 10px;
 }
 
+#seedet {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .gebucht {
   border: 1px solid var(--blue);
   width: fit-content;
   box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
   padding: 10px;
+  height: fit-content;
+  margin-bottom: 20px;
 }
 
 .summary > img {
   border-radius: 10px;
   margin: 20px;
-}
-
-.summary > button {
 }
 
 #roomdetails {
@@ -505,8 +511,16 @@ a {
   word-wrap: break-word;
 }
 
+.tablep {
+  word-wrap: break-word;
+}
+
 .newsinhalt {
   color: var(--grey);
+}
+
+.btnprmpt {
+  margin: 5px;
 }
 
 .newsdatum {
@@ -546,4 +560,31 @@ a {
 
 .bookdash {
   float: right;
+  margin: 0px 10px 10px;
+}
+
+.btn-primary {
+  background-color: var(--navy);
+  border-color: var(--navy);
+}
+
+.btn-primary:hover {
+  background-color: var(--lightnavy);
+}
+
+.in {
+  border-radius: 0px;
+  border: 0;
+  width: 100%;
+}
+
+.in img {
+  width: 300px;
+  height: auto;
+}
+
+.buttonform {
+  border-radius: 0;
+  border-right-width: 0px;
+  width: 100%;
 }

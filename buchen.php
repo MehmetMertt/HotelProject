@@ -22,6 +22,7 @@ function validateDate($date, $format = 'd.m.Y')
 
 $kostenparkplatz = 10;
 $kostenfruestueck = 7;
+$kostenTier = 2;
 
 if(isset($_POST['book'])) {
 
@@ -59,6 +60,10 @@ if(isset($_POST['book'])) {
 
     if($break == 1) {
         $preisProTag = $preisProTag + $kostenfruestueck;
+    }
+    
+    if($pets > 0) {
+        $preisProTag = $preisProTag + $kostenTier;
     }
 
 }
@@ -101,7 +106,7 @@ if(isset($_POST['booking'])) {
 
 
         //check ob daten manipuliert wurden
-        $query = $db->prepare('SELECT `preisProTag`, `maxPerson`, `maxHaustier`, `kategorie` from `zimmer` WHERE `zimmerId` = ?');
+        $query = $db->prepare('SELECT `preisProTag`, `maxPerson`, `maxHaustier`, `kategorie` from `zimmer` WHERE zimmerId = ?');
         $query->bind_param('i',$id);
         $query->execute();
         $query->store_result();
@@ -120,7 +125,7 @@ if(isset($_POST['booking'])) {
             exit();
         }
 
-        //check ob preis manipuliert wurde
+        //check ob preis manipuliert (böse) wurde
 
         
         //preis server-seitig berechnen
@@ -130,6 +135,10 @@ if(isset($_POST['booking'])) {
 
         if($break == 1) {
             $preisProTag = $preisProTag + $kostenfruestueck;
+        }
+
+        if($pets > 0) {
+            $preisProTag = $preisProTag + $kostenTier;
         }
 
         //freier termin server-seitig überprüfen
@@ -182,19 +191,17 @@ if(isset($_POST['booking'])) {
         $query->execute();
 
         
-        header("location: dashboard.php");
-        
-        echo "Zimmer gebucht :)";
-        
+        header("location: reservierung.php");
+                
   
     
 }
 
    
-$query = $db->prepare('SELECT kategorie from zimmer WHERE zimmerid = ?;');
+$query = $db->prepare('SELECT kategorie,bildpfad from zimmer as z  LEFT JOIN zimmerbilder zb on z.zimmerid = zb.zimmerid WHERE z.zimmerid = ?;');
 $query->bind_param('i', $id);
 $query->execute();
-$query->bind_result($kategorie2);
+$query->bind_result($kategorie2,$bildpfad);
 $query->fetch();  
 
 ?>
@@ -211,9 +218,9 @@ $query->fetch();
         <?php include 'inc/navbar.php';?>
 
 
-        <div class="steps">
+        <div class="container steps">
             <div class="center date">
-                <h2>Wählen Sie ihren Zeitraum aus</h2>
+                <h2>Select your time period</h2>
                 <input id="datepicker" />
                 <button style="float: right; margin: 5px" class="btn btn-primary" type="bookingdate" id="bookingdate"
                     onclick="sSteps(); getDates();" name="bookingdate">Weiter</button>
@@ -221,74 +228,75 @@ $query->fetch();
         </div>
 
 
-        <form method="post" action="buchen.php">
+        <form method="post" action="">
             <div id="summary" class="summary container block">
                 <h2>Booking Summary</h2>
                 <hr>
-                <div class="row">
-                    <div class="col-auto col-xs-12">
-                        <div>
-                            <img src="upload/hotelrooms/3.jpg" width="250px" alt="Hotelzimmer">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-3 col-12 col-sm-10">
+                        <div style="display: inline-grid;">
+                            <img src="<?php echo $bildpfad ?>" width="250px" alt="Hotelzimmer" />
+                            <a id="seedet" class="btn btn-primary" href="zimmerinformation.php?id=<?php echo $id; ?>"
+                                target="_blank">See
+                                Details</a>
                         </div>
-                        <div>
-                            <button id="roomdetails" class="btn btn-primary" type="bookingdate" id="bookingdate"
-                                name="bookingdate">See room
-                                details</button>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <p>Room Type: <?php include 'inc/kategorieparser.php';?></p>
-                        <p>Room Number: Room <?php echo $id; ?></p>
-                        <input type="hidden" name="zimmerID" value="<?php echo $id; ?>" />
-                        <p>Frühstück:
-                            <?php echo $break == 1 ? '✔️' : '❌'; ?> </p>
-                        <input type="hidden" name="fruestueck" value="<?php echo $break; ?>" />
-
-                        <p>Parkplatz: <?php echo $park == 1 ? '✔️' : '❌'; ?> </p>
-                        <input type="hidden" name="parkplatz" value="<?php echo $park; ?>" />
 
                     </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="details">
-                            <p>Erwachsene: <?php echo $adults; ?></p>
+
+                    <div class="col-lg-2 col-sm-6 col-12">
+                        <div>
+                            <p>Room Type: <b><?php include 'inc/kategorieparser.php'; ?></b></p>
+                            <p>Room Number:<b> Room <?php echo $id; ?></b></p>
+                            <input type="hidden" name="zimmerID" value="<?php echo $id; ?>" />
+                            <p>Breakfast:
+                                <?php echo $break == 1 ? '✔️' : '❌'; ?> </p>
+                            <input type="hidden" name="fruestueck" value="<?php echo $break; ?>" />
+
+                            <p>Parking lot: <?php echo $park == 1 ? '✔️' : '❌'; ?> </p>
+                            <input type="hidden" name="parkplatz" value="<?php echo $park; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 details col-sm-6 col-12">
+                        <div>
+                            <p>Adults: <b><?php echo $adults; ?></b></p>
                             <input type="hidden" name="adults" value="<?php echo $adults; ?>" />
-                            <p>Kinder: <?php echo $children; ?></p>
+                            <p>Children: <b><?php echo $children; ?></b></p>
                             <input type="hidden" name="children" value="<?php echo $children; ?>" />
-                            <p>Haustiere: <?php echo $pets; ?></p>
+                            <p>Pets: <b><?php echo $pets; ?></b></p>
                             <input type="hidden" name="pets" value="<?php echo $pets; ?>" />
                         </div>
+
                     </div>
 
-                    <div class="col col-sm-auto">
-                        <div class="gebucht">
-                            <table>
-                                <tr>
-                                    <th class="small text-muted pr-2" scope="row">Von</th>
-                                    <td id="startDate" style="float: right"></td>
-                                    <input type="hidden" id="startDateID" name="startDateID" value="" />
+                    <div class="offset-lg-2 col-lg-3 col-12 gebucht">
+                        <table>
+                            <tr>
+                                <th class="small text-muted pr-2" scope="row">From</th>
+                                <td id="startDate" style="float: right"></td>
+                                <input type="hidden" id="startDateID" name="startDateID" value="" />
 
-                                </tr>
-                                <tr>
-                                    <th class="small text-muted pr-2" scope="row">Bis</th>
-                                    <td id="endDate" style="float: right"></td>
-                                    <input type="hidden" id="endDateID" name="endDateID" value="" />
+                            </tr>
+                            <tr>
+                                <th class="small text-muted pr-2" scope="row">Till</th>
+                                <td id="endDate" style="float: right"></td>
+                                <input type="hidden" id="endDateID" name="endDateID" value="" />
 
-                                </tr>
-                                <tr>
-                                    <th class="small text-muted pr-2" scope="row">Price/Tag</th>
-                                    <td id="priceperday" style="float: right"><?php echo $preisProTag . " EUR"; ?></td>
-                                </tr>
-                                <tr>
-                                    <th class="small text-muted pr-2" scope="row"><b>Total</b></th>
-                                    <input type="hidden" id="preisProTag" name="preisProTag"
-                                        value="<?php echo $preisProTag; ?>" />
-                                    <td id="totalprice" style="float: right"><b></b>
-                                    </td>
-                                </tr>
-                            </table>
-                            <button id="booknow" class="btn btn-primary" type="submit" id="booking" name="booking">Jetzt
-                                Buchen</button>
-                        </div>
+                            </tr>
+                            <tr>
+                                <th class="small text-muted pr-2" scope="row">Price/Night</th>
+                                <td id="priceperday" style="float: right"><?php echo $preisProTag . " EUR"; ?></td>
+                            </tr>
+                            <tr>
+                                <th class="small text-muted pr-2" scope="row"><b>Total</b></th>
+                                <input type="hidden" id="preisProTag" name="preisProTag"
+                                    value="<?php echo $preisProTag; ?>" />
+                                <td id="totalprice" style="float: right"><b></b>
+                                </td>
+                            </tr>
+                        </table>
+                        <button id="booknow" class="btn btn-primary" type="submit" id="booking" name="booking">Book
+                            Now</button>
                     </div>
                 </div>
             </div>
@@ -406,7 +414,7 @@ $query->fetch();
         },
         LockPlugin: {
             minDate: new Date(),
-            minDays: 0,
+            minDays: 2,
             inseparable: true,
             filter(date, picked) {
                 return bookedDates.some(([start, end]) => date.isSameOrAfter(start, 'day') &&

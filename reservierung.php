@@ -10,9 +10,24 @@ if(isset($_SESSION['id']) == FALSE) {
 
 $id = $_SESSION['id'];
 
-$query = $db->prepare('SELECT zimmerid,userid,von,bis,preis,wann,fruestueck,parkplatz,adults,pets,children,g.buchungsid
-FROM `gebuchtezimmer` as g join buchungsdetails as b on g.buchungsid = b.buchungsid  WHERE `userid` = ?');
-$query->bind_param('i',$id);
+if(isset($_GET['own'])) {
+    $ownprofile = trim(htmlspecialchars($_GET['own']));
+} else {
+    $ownprofile = 1;
+}
+
+
+if((int)$ownprofile == 1 || $_SESSION['isAdmin'] == 0) {
+    $query = $db->prepare('SELECT zimmerid,userid,von,bis,preis,wann,fruestueck,parkplatz,adults,pets,children,g.buchungsid
+    FROM `gebuchtezimmer` as g join buchungsdetails as b on g.buchungsid = b.buchungsid  WHERE `userid` = ?');
+    $query->bind_param('i',$id);
+} else{
+    if($_SESSION['isAdmin'] == 1) {
+        $query = $db->prepare('SELECT zimmerid,userid,von,bis,preis,wann,fruestueck,parkplatz,adults,pets,children,g.buchungsid
+        FROM `gebuchtezimmer` as g join buchungsdetails as b on g.buchungsid = b.buchungsid');
+    }
+}
+
 $query->execute();
 $allebuchungen = $query->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -25,9 +40,16 @@ if(isset($_GET['booking'])) {
     $bookingid = trim(htmlspecialchars($_GET['booking']));
     if(empty($_GET['booking']) == FALSE && is_numeric($_GET['booking']) == TRUE) {
 
-        $query = $db->prepare('SELECT zimmerid,userid,von,bis,preis,wann,fruestueck,parkplatz,adults,pets,children,g.buchungsid
-        FROM `gebuchtezimmer` as g join buchungsdetails as b on g.buchungsid = b.buchungsid WHERE g.buchungsid = ? AND g.userid = ?');
-        $query->bind_param('ii',$bookingid,$id);
+        if($_SESSION['isAdmin'] == 1) {
+            $query = $db->prepare('SELECT zimmerid,userid,von,bis,preis,wann,fruestueck,parkplatz,adults,pets,children,g.buchungsid
+            FROM `gebuchtezimmer` as g join buchungsdetails as b on g.buchungsid = b.buchungsid WHERE g.buchungsid = ?');
+            $query->bind_param('i',$bookingid);
+        } else {
+            $query = $db->prepare('SELECT zimmerid,userid,von,bis,preis,wann,fruestueck,parkplatz,adults,pets,children,g.buchungsid
+            FROM `gebuchtezimmer` as g join buchungsdetails as b on g.buchungsid = b.buchungsid WHERE g.buchungsid = ? AND g.userid = ?');
+            $query->bind_param('ii',$bookingid,$id);
+        }
+        
         $query->execute();
         $query->store_result();
         
@@ -46,10 +68,10 @@ if(isset($_GET['booking'])) {
     }
 }
 
-$query = $db->prepare('SELECT kategorie from zimmer WHERE zimmerid = ?;');
+$query = $db->prepare('SELECT kategorie,bildpfad from zimmer as z left join zimmerbilder as zb on z.zimmerid=zb.zimmerId WHERE z.zimmerid = ?;');
 $query->bind_param('i', $id);
 $query->execute();
-$query->bind_result($kategorie2);
+$query->bind_result($kategorie2,$bildpfad);
 $query->fetch();  
 
 ?>
@@ -71,104 +93,44 @@ $query->fetch();
     <?php
       $count = 0;  
     ?>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">BookingID</th>
-                <th scope="col">Room Number</th>
-                <th scope="col">Start Date</th>
-                <th scope="col">End Date</th>
-                <th scope="col">More Informationens</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($allebuchungen as $buchung) : ?>
-            <?php
+    <div class="container" style="overflow-x:auto;">
+        <h1>Your reservations</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">BookingID</th>
+                    <th scope="col">Room Number</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">More Informationens</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($allebuchungen as $buchung) : ?>
+                <?php
                 $count = $count + 1;
                 ?>
-            <tr>
-                <th scope="row"><?php echo $count ?></th>
-                <td><?php echo $buchung['buchungsid']; ?></td>
-                <td><?php echo $buchung['zimmerid']; ?></td>
-                <td><?php echo $buchung['von']; ?></td>
-                <td><?php echo $buchung['bis']; ?></td>
-                <td><a href="<?php echo "reservierung.php?booking=" . $buchung['buchungsid']; ?>">More Information</a>
-                </td>
+                <tr>
+                    <th scope="row"><?php echo $count ?></th>
+                    <td><?php echo $buchung['buchungsid']; ?></td>
+                    <td><?php echo $buchung['zimmerid']; ?></td>
+                    <td><?php echo $buchung['von']; ?></td>
+                    <td><?php echo $buchung['bis']; ?></td>
+                    <td><a href="<?php echo "reservierung.php?booking=" . $buchung['buchungsid']; ?>">More
+                            Information</a>
+                    </td>
 
-            </tr>
-        </tbody>
-        <?php endforeach; ?>
-    </table>
-    <?php endif; ?>
-
-
-    <?php if(isset($_GET['booking']) && isset($message) == FALSE) : ?>
-    <div id="summary" class="summary container">
-        <h2>Booking Summary</h2>
-        <hr>
-        <div class="row">
-            <div class="col-auto col-xs-12">
-                <div>
-                    <img src="upload/hotelrooms/3.jpg" width="250px" alt="Hotelzimmer">
-                </div>
-                <div>
-                    <button id="roomdetails" class="btn btn-primary" type="bookingdate" id="bookingdate"
-                        name="bookingdate">See room
-                        details</button>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <p>Room Type: <?php include 'inc/kategorieparser.php'; ?></p>
-                <p>Room Number: Room <?php echo $id; ?></p>
-                <input type="hidden" name="zimmerID" value="<?php echo $id; ?>" />
-                <p>Frühstück:
-                    <?php echo $break == 1 ? '✔️' : '❌'; ?> </p>
-                <input type="hidden" name="fruestueck" value="<?php echo $break; ?>" />
-
-                <p>Parkplatz: <?php echo $park == 1 ? '✔️' : '❌'; ?> </p>
-                <input type="hidden" name="parkplatz" value="<?php echo $park; ?>" />
-
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="details">
-                    <p>Erwachsene: <?php echo $adults; ?></p>
-                    <input type="hidden" name="adults" value="<?php echo $adults; ?>" />
-                    <p>Kinder: <?php echo $children; ?></p>
-                    <input type="hidden" name="children" value="<?php echo $children; ?>" />
-                    <p>Haustiere: <?php echo $pets; ?></p>
-                    <input type="hidden" name="pets" value="<?php echo $pets; ?>" />
-                </div>
-            </div>
-
-            <div class="col col-sm-auto">
-                <div class="gebucht">
-                    <table>
-                        <tr>
-                            <th class="small text-muted pr-2" scope="row">Von</th>
-                            <td id="startDate" style="float: right"><?php echo $von;?></td>
-                            <input type="hidden" id="startDateID" name="startDateID" value="" />
-
-                        </tr>
-                        <tr>
-                            <th class="small text-muted pr-2" scope="row">Bis</th>
-                            <td id="endDate" style="float: right"><?php echo $bis;?></td>
-                            <input type="hidden" id="endDateID" name="endDateID" value="" />
-
-                        </tr>
-                        <tr>
-                            <th class="small text-muted pr-2" scope="row"><b>Total</b></th>
-                            <input type="hidden" id="preisProTag" name="preisProTag"
-                                value="<?php echo $preisProTag; ?>" />
-                            <td id="totalprice" style="float: right"><b><?php echo $totalprice . " EUR";?></b>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+                </tr>
+            </tbody>
+            <?php endforeach; ?>
+        </table>
     </div>
     <?php endif; ?>
+
+
+    <?php include 'inc/roominfo.php'?>
+
 
     <?php
     include 'inc/footer.php';

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <?php include 'inc/head.php'; ?>
 
 
@@ -18,7 +19,7 @@
 
             <div class="titlemain col-xs-12 text-center">
                 <h1><b>Continental</b></h1>
-                <h4><b>Continental - your home</b></h4>
+                <h2><b>Continental - your hotel</b></h2>
             </div>
 
             <div class="bookdiv col-xs-12 text-center">
@@ -60,41 +61,43 @@
     </section>
     <!--Feature Section END-->
 
-    <div class="zimmer">
-        <img src="img/hotelzimmer.jpg" alt="hotelzimmer">
+    <div class="zimmer in">
+        <img class="img-fluid" src="img/hotelzimmer.jpg" alt="hotelzimmer">
         <p>
-            Willkommen in unserer exquisiten Oase des Luxus, wo Stil und Raffinesse miteinander verschmelzen. Dieses
-            außergewöhnliche 5-Sterne-Hotelzimmer bietet Ihnen den Inbegriff von Eleganz und Komfort. Der Augenblick, in
-            dem Sie die Tür öffnen, offenbart einen atemberaubenden Blick auf die Skyline der Stadt, der durch die
-            raumhohen Fenster hereinströmt und die wunderbar gestalteten Räume in ein helles Licht taucht.
-            Der großzügige Wohnbereich präsentiert eine harmonische Kombination aus modernem Design und traditioneller
-            Handwerkskunst. Von den maßgefertigten Möbeln bis zum hochwertigen Teppichboden - jedes Detail verströmt
-            Stil und Qualität.
-            Das Schlafzimmer ist ein Rückzugsort der Ruhe und Erholung. Ein luxuriöses Kingsize-Bett mit handgefertigter
-            Bettwäsche aus ägyptischer Baumwolle verspricht himmlische Nächte. Die Auswahl an Premium-Kissen und Decken
-            garantiert ultimativen Schlafkomfort.
+            Welcome to our exquisite oasis of luxury, where style and sophistication blend together. This
+            exceptional 5-star hotel room offers you the epitome of elegance and comfort. The moment you
+            you open the door reveals a breathtaking view of the city skyline streaming in through the floor-to-ceiling
+            windows.
+            through the floor-to-ceiling windows, bathing the beautifully designed rooms in a bright light.
+            The spacious living area presents a harmonious combination of modern design and traditional craftsmanship.
+            craftsmanship. From the custom-made furniture to the high-quality carpeting - every detail exudes style and
+            quality.
+            style and quality.
+            The bedroom is a retreat for rest and relaxation. A luxurious king-size bed with handcrafted
+            Egyptian cotton bed linen promises heavenly nights. The selection of premium pillows and blankets
+            guarantees the ultimate in sleeping comfort.
         </p>
     </div>
 
 
     <div class="offer">
-        <h1 class="title">Angebot</h1>
+        <h1 class="title">Offer</h1>
         <div class="card">
             <img src="img/gym.jpg" alt="gym">
             <h1>Gym</h1>
-            <p>In all unseren Standorten, gibt es ein Fitnesstudio mit den modernsten Geräten.</p>
+            <p>All our locations have a fitness studio with state-of-the-art equipment.</p>
         </div>
 
         <div class="card">
             <img src="img/pool.jpg" alt="pool">
             <h1>Pool</h1>
-            <p>Während ihren gesamten Aufenthalts, können Sie unseren Pool ohne weitere Kosten verwenden.</p>
+            <p>During your entire stay, you can use our pool at no extra cost.</p>
         </div>
 
         <div class="card">
             <img src="img/breakfast.jpeg" alt="gym">
-            <h1>Frühstück</h1>
-            <p>Wir bieten Ihnen gratis Frühstück für Ihren gesamten Aufenthalt.</p>
+            <h1>Breakfast</h1>
+            <p>We offer the best breakfast from around the globe!</p>
         </div>
     </div>
 
@@ -106,9 +109,7 @@
 
 
 
-    <!---JS-->
     <script>
-    // When the user scrolls down 80px from the top of the document, resize the navbar's padding and the logo's font size
     window.onscroll = function() {
         scrollFunction()
     };

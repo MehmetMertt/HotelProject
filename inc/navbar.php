@@ -43,13 +43,9 @@ if(isset($_SESSION['id'])) {
                         Admin-Menü
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="createnews.php">News-Beitrage erstellen</a></li>
-                        <li><a class="dropdown-item" href="users.php">User-Bearbeiten</a></li>
-                        <li><a class="dropdown-item" href="allereservierungen.php">Alle Reservierungen</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">#</a></li>
+                        <li><a class="dropdown-item" href="createnews.php">Create News Article</a></li>
+                        <li><a class="dropdown-item" href="users.php">Modify User Data</a></li>
+                        <li><a class="dropdown-item" href="reservierung.php?own=0">View all reservations</a></li>
                     </ul>
                 </li>
 
@@ -69,7 +65,7 @@ if(isset($_SESSION['id'])) {
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                        <li><a class="dropdown-item" href="reservierung.php">My Reservations</a></li>
+                        <li><a class="dropdown-item" href="reservierung.php?own=1">My Reservations</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>

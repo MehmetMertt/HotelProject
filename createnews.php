@@ -34,8 +34,8 @@ if(isset($_POST['uploadnews']) && isset($_POST['body']) && isset($_POST['title']
 
     if($checkIfError == TRUE) {
         $body = preg_replace('/&[^;]+;/', '', $body);
-        $body = preg_replace('/(?<!#)#([^#]+)#(?!#)/', '<h1>$1</h1>', $body);
-        $body = preg_replace('/##([^#]+)##/', '<h3>$1</h3>', $body);        
+        $body = preg_replace('/^#(.*)/', '<h1>$1</h1>', $body);
+        $body = preg_replace('/##(.*)/', '<h3>$1</h3>', $body);        
         $body = preg_replace('/\*\*([^*]+)\*\*/', '<b>$1</b>', $body);
 
     
@@ -103,7 +103,7 @@ if(isset($_POST['uploadnews']) && isset($_POST['body']) && isset($_POST['title']
                     $query->bind_param('ssss',$title,$datapath, $id, $body);
                     $query->execute();
                     if($query->affected_rows > 0 ) {
-                        $message = "You file was successfully uploaded!";
+                        $messageErfolg = "You file was successfully uploaded!";
                     } else {
                         $message = "There was a error while uploading your file!";
                         unlink($tempnam);
@@ -143,25 +143,9 @@ if(isset($_POST['uploadnews']) && isset($_POST['body']) && isset($_POST['title']
     include 'inc/navbar.php';
     ?>
 
-    <div class="container">
+    <div class="main container">
 
-        <?php if(isset($message) && $checkIfError == FALSE): ?>
-        <div class="container">
-            <div class="alert alert-danger alert-dismissible fade show">
-                <strong>Error!</strong> <?php echo $message; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </div>
-        <?php endif; ?>
-
-        <?php if(isset($message) && $checkIfError == TRUE): ?>
-        <div class="container">
-            <div class="alert alert-success  alert-dismissible fade show">
-                <strong>Success!</strong> <?php echo $message; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        </div>
-        <?php endif; ?>
+        <?php include 'inc/errorhandler.php' ?>
 
         <form action="createnews.php" method="post" enctype="multipart/form-data">
             <div class=" row g-3">
@@ -178,11 +162,10 @@ if(isset($_POST['uploadnews']) && isset($_POST['body']) && isset($_POST['title']
                 </div>
 
                 <div class="col-md-6">
-
-                    <input class="btn btn-primary" onclick="bold()" type="button" value="Bold">
-                    <input class="btn btn-primary" onclick="header1()" type="button" value="Header 1">
-                    <input class="btn btn-primary" onclick="header2()" type="button" value="Header 2">
-                    <input class="btn btn-primary" onclick="chatgpt()" type="button" value="ChatGPT Prompt">
+                    <input class="btnprmpt btn btn-primary" onclick="bold()" type="button" value="Bold">
+                    <input class="btnprmpt btn btn-primary" onclick="header1()" type="button" value="Header 1">
+                    <input class="btnprmpt btn btn-primary" onclick="header2()" type="button" value="Header 2">
+                    <input class="btnprmpt btn btn-primary" onclick="chatgpt()" type="button" value="ChatGPT Prompt">
                 </div>
 
                 <br><br>
@@ -210,16 +193,16 @@ if(isset($_POST['uploadnews']) && isset($_POST['body']) && isset($_POST['title']
     }
 
     function header1() {
-        document.getElementById('body').value += "\n# #\n";
+        document.getElementById('body').value += "\n# ";
     }
 
     function header2() {
-        document.getElementById('body').value += "\n## ##\n";
+        document.getElementById('body').value += "\n## ";
     }
 
     function chatgpt() {
         var prompt =
-            "User Hey. You are a hotel news blog/news specialist. You have 50 years of experience in this business. When I give you a topic, you will give me a news article/blog. It should be more than 500 Words and go into detail. Use # for Header 1 e.g: # Example # ## for Header 2 e.g: ## Example ## ** for Bold e.g: ** Example **. Try to write like a native and do not include the title again in your blog post/news. And do not use any special characters like @, #, dont use ' ` and ;. Dont use apostrophes! (everthing that will be escaped when u use htmlspecialchars in php) and so on. Use ae for ä, ue for ü and so on. My topic is: " +
+            "You are a hotel news creater. When I give you a title you write me a news/blog about 400-500 words. Use # and ## like in markdown, dont use any other markdown symbols. My title is: " +
             document.getElementById('title').value;
         navigator.clipboard.writeText(prompt);
         alert("OpenAI will open in 2s!");

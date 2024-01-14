@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +13,7 @@
     <?php
   include 'inc/navbar.php';
   ?>
-    <div class="bodyhelp">
+    <div class="container">
         <h1>Frequently Asked Question</h1>
 
         <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -17,12 +21,12 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                        Welche Zahlungsmethoden nehmen Sie an?
+                        Which payment methods do you accept?
                     </button>
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Wir nehmen die gängigen Zahlungsmöglichkeiten - Visa, Mastercard,
-                        AmericanExpress - an.
+                    <div class="accordion-body">We accept the most common payment methods - Visa, Mastercard,
+                        AmericanExpress - are accepted.
                     </div>
                 </div>
             </div>
@@ -30,11 +34,11 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                        Darf ich mein Haustier mitnehmen?
+                        Can I take my pet with me?
                     </button>
                 </h2>
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Haustiere sind in unserem Hotel <b>herzlichst</b> willkommen!
+                    <div class="accordion-body">A maximum of 2 pets are <b>welcome</b> in our hotel!
                     </div>
                 </div>
             </div>
@@ -42,12 +46,12 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                        Ich habe ein falsches Zimmer gebucht, was soll ich machen?
+                        I booked the wrong room, what should I do?
                     </button>
                 </h2>
                 <div id="flush-collapseThree" class="accordion-collapse collapse"
                     data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body"> Auf ihrem Dashboard können Sie ihre Buchung innerhalb 24h stornieren.
+                    <div class="accordion-body">Please contact our support
                     </div>
                 </div>
             </div>
@@ -55,11 +59,10 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapse4" aria-expanded="false" aria-controls="flush-collapse4">
-                        Mein Hotelzimmer war bei der Ankunft beschädigt, was soll ich machen?
-                    </button>
+                        My hotel room was damaged on arrival, what should I do? </button>
                 </h2>
                 <div id="flush-collapse4" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Bitte melden Sie sich bei der Rezeption des Hotels.
+                    <div class="accordion-body">Please contact the hotel reception.
                     </div>
                 </div>
             </div>
@@ -67,13 +70,13 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapse5" aria-expanded="false" aria-controls="flush-collapse5">
-                        Wie erfahre ich, ob das Hotel über freie Zimmer verfügt?
+                        How do I find out if the hotel has rooms available?
                     </button>
                 </h2>
                 <div id="flush-collapse5" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body"> Sie können die Verfügbarkeit von Hotelzimmern direkt auf unserer
-                        Website überprüfen. Geben Sie einfach Ihre Reisedaten und die Anzahl
-                        der Gäste ein, und wir zeigen Ihnen verfügbare Zimmer und Preise
+                    <div class="accordion-body">You can check the availability of hotel rooms directly on our
+                        website. Simply enter your travel dates and the number of
+                        of guests and we will show you available rooms and prices
                     </div>
                 </div>
             </div>
@@ -81,11 +84,10 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapse6" aria-expanded="false" aria-controls="flush-collapse6">
-                        Was mache ich, wenn ich Hilfe oder Unterstützung benötige?
-                    </button>
+                        What do I do if I need help or support? </button>
                 </h2>
                 <div id="flush-collapse6" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body"> Auf ihrem Dashboard können Sie ihre Buchung innerhalb 24h stornieren.
+                    <div class="accordion-body">Feel free to get in touch with one of our staff members!
                     </div>
                 </div>
             </div>
@@ -93,11 +95,11 @@
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#flush-collapse7" aria-expanded="false" aria-controls="flush-collapse7">
-                        Ich habe ein falsches Zimmer gebucht, was soll ich machen?
+                        I booked the wrong room, what should I do?
                     </button>
                 </h2>
                 <div id="flush-collapse7" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body"> A Wenn Sie Hilfe oder Unterstützung benötigen, zögern Sie nicht,
+                    <div class="accordion-body">If you need help or support, please do not hesitate to contact us,
                         unseren
                         Kundenservice zu kontaktieren. Sie erreichen uns per Telefon oder
                         E-Mail, und wir sind rund um die Uhr für Sie da, um Ihre Fragen zu
